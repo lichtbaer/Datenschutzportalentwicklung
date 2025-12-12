@@ -18,6 +18,7 @@ export interface UploadResult {
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const API_TOKEN = import.meta.env.VITE_API_TOKEN;
 
 export const api = {
   upload: async (data: UploadData): Promise<UploadResult> => {
@@ -48,6 +49,9 @@ export const api = {
     try {
       const response = await fetch(`${API_BASE_URL}/upload`, {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${API_TOKEN}`,
+        },
         body: formData,
       });
 
