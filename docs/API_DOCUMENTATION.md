@@ -128,7 +128,7 @@ const result = await response.json();
 | `timestamp` | string | ISO 8601 Zeitstempel des Uploads |
 | `files_uploaded` | number | Anzahl erfolgreich hochgeladener Dateien |
 | `message` | string | Status-Nachricht |
-| `hessenbox_path` | string | Pfad in der Hessenbox |
+| `nextcloud_path` | string | Pfad in der Nextcloud |
 
 #### Error Responses
 
@@ -166,7 +166,7 @@ const result = await response.json();
 
 ```json
 {
-  "detail": "Hessenbox connection failed"
+  "detail": "Nextcloud connection failed"
 }
 ```
 
@@ -398,7 +398,7 @@ Alle Fehler folgen dem Format:
 | `FILE_TOO_LARGE` | Datei überschreitet Größenlimit |
 | `FILE_TYPE_NOT_ALLOWED` | Dateityp nicht erlaubt |
 | `PROJECT_NOT_FOUND` | Projekt nicht gefunden |
-| `HESSENBOX_ERROR` | Fehler bei Hessenbox-Verbindung |
+| `NEXTCLOUD_ERROR` | Fehler bei Nextcloud-Verbindung |
 | `EMAIL_ERROR` | Fehler beim E-Mail-Versand |
 | `INTERNAL_ERROR` | Interner Server-Fehler |
 

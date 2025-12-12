@@ -249,7 +249,7 @@ def upload_file():
     pass
 
 # Classes: PascalCase
-class HessenboxService:
+class NextcloudService:
     pass
 
 # Constants: UPPER_SNAKE_CASE
@@ -269,7 +269,7 @@ def upload_documents(
     files: List[UploadFile]
 ) -> UploadResponse:
     """
-    Upload documents to Hessenbox.
+    Upload documents to Nextcloud.
     
     Args:
         email: User email address
@@ -289,7 +289,7 @@ from typing import List
 from fastapi import FastAPI, UploadFile
 from pydantic import BaseModel
 
-from app.services.hessenbox import HessenboxService
+from app.services.nextcloud import NextcloudService
 ```
 
 #### Type Hints

@@ -13,7 +13,7 @@ Das Backend wird mit **Python FastAPI** entwickelt und bietet REST API Endpunkte
 - **Pydantic**: Data Validation
 
 ### Datei-Speicherung
-- **WebDAV Client**: Hessenbox Integration
+- **WebDAV Client**: Nextcloud Integration
 - **Libraries**: `webdavclient3` oder `easywebdav`
 
 ### E-Mail
@@ -43,7 +43,7 @@ backend/
 │   │   └── health.py           # Health Check
 │   ├── services/
 │   │   ├── __init__.py
-│   │   ├── hessenbox.py        # WebDAV Integration
+│   │   ├── nextcloud.py        # WebDAV Integration
 │   │   ├── email_service.py    # E-Mail Versand
 │   │   └── validation.py       # Business Logic
 │   ├── utils/
@@ -55,7 +55,7 @@ backend/
 ├── tests/
 │   ├── __init__.py
 │   ├── test_upload.py
-│   └── test_hessenbox.py
+│   └── test_nextcloud.py
 ├── requirements.txt
 ├── .env.example
 ├── Dockerfile
@@ -122,11 +122,11 @@ API_PORT=8000
 API_DEBUG=False
 CORS_ORIGINS=http://localhost:3000,https://your-frontend-domain.com
 
-# Hessenbox Configuration
-HESSENBOX_URL=https://hessenbox.tu-darmstadt.de/remote.php/webdav/
-HESSENBOX_USERNAME=your_username
-HESSENBOX_PASSWORD=your_password
-HESSENBOX_BASE_PATH=/Datenschutzportal
+# Nextcloud Configuration
+NEXTCLOUD_URL=https://nextcloud.example.com/remote.php/webdav/
+NEXTCLOUD_USERNAME=your_username
+NEXTCLOUD_PASSWORD=your_password
+NEXTCLOUD_BASE_PATH=/Datenschutzportal
 
 # SMTP Configuration
 SMTP_HOST=smtp.uni-frankfurt.de
@@ -167,11 +167,11 @@ class Settings(BaseSettings):
     api_debug: bool = False
     cors_origins: List[str] = ["http://localhost:3000"]
     
-    # Hessenbox
-    hessenbox_url: str
-    hessenbox_username: str
-    hessenbox_password: str
-    hessenbox_base_path: str = "/Datenschutzportal"
+    # Nextcloud
+    nextcloud_url: str
+    nextcloud_username: str
+    nextcloud_password: str
+    nextcloud_base_path: str = "/Datenschutzportal"
     
     # SMTP
     smtp_host: str
@@ -286,7 +286,7 @@ class UploadResponse(BaseModel):
 ```python
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from typing import List
-from app.services.hessenbox import HessenboxService
+from app.services.nextcloud import NextcloudService
 from app.services.email_service import EmailService
 from app.models.upload import UploadResponse
 from app.config import settings
@@ -294,7 +294,7 @@ import uuid
 from datetime import datetime
 
 router = APIRouter()
-hessenbox = HessenboxService()
+nextcloud = NextcloudService()
 email_service = EmailService()
 
 @router.post("/upload", response_model=UploadResponse)
@@ -307,7 +307,7 @@ async def upload_documents(
     files: List[UploadFile] = File(...)
 ):
     """
-    Upload Datenschutz-Dokumente zur Hessenbox
+    Upload Datenschutz-Dokumente zur Nextcloud
     """
     try:
         # Generate unique Project ID
@@ -329,18 +329,18 @@ async def upload_documents(
                 )
         
         # Create project folder structure
-        project_path = f"{settings.hessenbox_base_path}/{institution}/{project_id}"
-        hessenbox.create_folder(project_path)
+        project_path = f"{settings.nextcloud_base_path}/{institution}/{project_id}"
+        nextcloud.create_folder(project_path)
         
         # Upload files by category
         uploaded_files = []
         for file in files:
             category = file.metadata.get("category", "sonstiges")
             category_path = f"{project_path}/{category}"
-            hessenbox.create_folder(category_path)
+            nextcloud.create_folder(category_path)
             
             file_path = f"{category_path}/{file.filename}"
-            await hessenbox.upload_file(file, file_path)
+            await nextcloud.upload_file(file, file_path)
             
             uploaded_files.append({
                 "filename": file.filename,
@@ -360,7 +360,7 @@ async def upload_documents(
             "files": uploaded_files
         }
         
-        await hessenbox.upload_metadata(metadata, f"{project_path}/metadata.json")
+        await nextcloud.upload_metadata(metadata, f"{project_path}/metadata.json")
         
         # Send confirmation email to user
         await email_service.send_confirmation_email(
@@ -397,13 +397,13 @@ async def get_upload_status(project_id: str):
     Get upload status for a project
     """
     try:
-        metadata = await hessenbox.get_metadata(project_id)
+        metadata = await nextcloud.get_metadata(project_id)
         return metadata
     except Exception as e:
         raise HTTPException(status_code=404, detail="Project not found")
 ```
 
-### services/hessenbox.py
+### services/nextcloud.py
 
 ```python
 from webdav3.client import Client
@@ -414,18 +414,18 @@ from fastapi import UploadFile
 import tempfile
 import os
 
-class HessenboxService:
+class NextcloudService:
     def __init__(self):
         self.client = Client({
-            'webdav_hostname': settings.hessenbox_url,
-            'webdav_login': settings.hessenbox_username,
-            'webdav_password': settings.hessenbox_password,
+            'webdav_hostname': settings.nextcloud_url,
+            'webdav_login': settings.nextcloud_username,
+            'webdav_password': settings.nextcloud_password,
             'webdav_timeout': 30
         })
     
     def create_folder(self, path: str) -> bool:
         """
-        Create a folder in Hessenbox
+        Create a folder in Nextcloud
         """
         try:
             if not self.client.check(path):
@@ -437,7 +437,7 @@ class HessenboxService:
     
     async def upload_file(self, file: UploadFile, remote_path: str) -> bool:
         """
-        Upload a file to Hessenbox
+        Upload a file to Nextcloud
         """
         try:
             # Save to temporary file
@@ -446,7 +446,7 @@ class HessenboxService:
                 tmp_file.write(content)
                 tmp_path = tmp_file.name
             
-            # Upload to Hessenbox
+            # Upload to Nextcloud
             self.client.upload_sync(remote_path=remote_path, local_path=tmp_path)
             
             # Clean up
@@ -459,7 +459,7 @@ class HessenboxService:
     
     async def upload_metadata(self, metadata: Dict[Any, Any], remote_path: str) -> bool:
         """
-        Upload metadata JSON to Hessenbox
+        Upload metadata JSON to Nextcloud
         """
         try:
             with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as tmp_file:
@@ -476,12 +476,12 @@ class HessenboxService:
     
     async def get_metadata(self, project_id: str) -> Dict[Any, Any]:
         """
-        Retrieve project metadata from Hessenbox
+        Retrieve project metadata from Nextcloud
         """
         try:
             # Search in both university and clinic folders
             for institution in ['university', 'clinic']:
-                path = f"{settings.hessenbox_base_path}/{institution}/{project_id}/metadata.json"
+                path = f"{settings.nextcloud_base_path}/{institution}/{project_id}/metadata.json"
                 if self.client.check(path):
                     with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
                         tmp_path = tmp_file.name
@@ -501,7 +501,7 @@ class HessenboxService:
     
     def list_files(self, path: str) -> list:
         """
-        List files in a Hessenbox directory
+        List files in a Nextcloud directory
         """
         try:
             return self.client.list(path)
@@ -605,7 +605,7 @@ class EmailService:
             <p><strong>Institution:</strong> {institution}</p>
             <p><strong>Uploader E-Mail:</strong> {uploader_email}</p>
             <p><strong>Anzahl Dateien:</strong> {files_count}</p>
-            <p><a href="{settings.hessenbox_url}">Zur Hessenbox</a></p>
+            <p><a href="{settings.nextcloud_url}">Zur Nextcloud</a></p>
         </body>
         </html>
         """
@@ -655,7 +655,7 @@ Siehe [DEPLOYMENT.md](./DEPLOYMENT.md) für detaillierte Deployment-Anleitung.
 
 1. ✅ Python Environment aufsetzen
 2. ✅ Requirements installieren
-3. ⬜ Hessenbox Zugangsdaten erhalten
+3. ⬜ Nextcloud Zugangsdaten erhalten
 4. ⬜ SMTP Server konfigurieren
 5. ⬜ API Endpunkte implementieren
 6. ⬜ E-Mail Templates erstellen

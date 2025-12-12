@@ -17,7 +17,7 @@ Dieser Guide beschreibt das Deployment des Datenschutzportals für Produktionsum
 - Docker 20.10+
 - Docker Compose 2.0+
 - Domain mit SSL-Zertifikat
-- Hessenbox-Zugangsdaten
+- Nextcloud-Zugangsdaten
 - SMTP-Server-Zugang
 
 ### Projektstruktur
@@ -228,11 +228,11 @@ API_PORT=8000
 API_DEBUG=False
 CORS_ORIGINS=https://datenschutzportal.uni-frankfurt.de
 
-# Hessenbox Configuration
-HESSENBOX_URL=https://hessenbox.tu-darmstadt.de/remote.php/webdav/
-HESSENBOX_USERNAME=production_user
-HESSENBOX_PASSWORD=secure_password_here
-HESSENBOX_BASE_PATH=/Datenschutzportal
+# Nextcloud Configuration
+NEXTCLOUD_URL=https://nextcloud.example.com/remote.php/webdav/
+NEXTCLOUD_USERNAME=production_user
+NEXTCLOUD_PASSWORD=secure_password_here
+NEXTCLOUD_BASE_PATH=/Datenschutzportal
 
 # SMTP Configuration
 SMTP_HOST=smtp.uni-frankfurt.de
@@ -611,17 +611,17 @@ output.elasticsearch:
 
 ## 4. Backup & Recovery
 
-### Hessenbox Backup
+### Nextcloud Backup
 
 ```bash
 #!/bin/bash
-# backup_hessenbox.sh
+# backup_nextcloud.sh
 
-BACKUP_DIR="/backup/hessenbox"
+BACKUP_DIR="/backup/nextcloud"
 DATE=$(date +%Y%m%d_%H%M%S)
 
 # Backup via WebDAV
-rclone sync hessenbox:/Datenschutzportal $BACKUP_DIR/datenschutzportal-$DATE
+rclone sync nextcloud:/Datenschutzportal $BACKUP_DIR/datenschutzportal-$DATE
 
 # Keep last 30 days
 find $BACKUP_DIR -type d -mtime +30 -exec rm -rf {} \;
@@ -700,7 +700,7 @@ gunicorn app.main:app \
 **Issue**: Langsame Uploads  
 **Solution**: Erhöhe Timeouts in Nginx und FastAPI
 
-**Issue**: Hessenbox Connection Timeout  
+**Issue**: Nextcloud Connection Timeout  
 **Solution**: Prüfe Firewall-Regeln und WebDAV-Zugangsdaten
 
 ### Logs

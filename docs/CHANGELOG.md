@@ -9,7 +9,7 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ### Geplant
 - Backend-Entwicklung mit FastAPI
-- Hessenbox-Integration
+- Nextcloud-Integration
 - E-Mail-Service-Konfiguration
 - Projekt-Suchfunktionalität
 - Admin-Dashboard
@@ -153,7 +153,7 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - [ ] GET `/api/health` - Health Check
 
 #### Services
-- [ ] Hessenbox WebDAV Integration
+- [ ] Nextcloud WebDAV Integration
 - [ ] E-Mail-Service (SMTP)
 - [ ] Projekt-Verwaltung
 - [ ] Audit-Logging
