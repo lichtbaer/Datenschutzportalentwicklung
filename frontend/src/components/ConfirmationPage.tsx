@@ -40,7 +40,7 @@ export function ConfirmationPage({
           <h1 className="text-gray-900 mb-2">Upload erfolgreich abgeschlossen!</h1>
           
           <p className="text-gray-600 max-w-xl mx-auto">
-            Ihre Dokumente wurden erfolgreich hochgeladen und in der Hessenbox gespeichert. 
+            Ihre Dokumente wurden erfolgreich hochgeladen und in der Nextcloud gespeichert. 
             Eine Bestätigungs-E-Mail wurde an Ihre E-Mail-Adresse versendet.
           </p>
         </div>
