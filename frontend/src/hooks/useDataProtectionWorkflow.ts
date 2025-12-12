@@ -15,6 +15,7 @@ export function useDataProtectionWorkflow() {
   const [email, setEmail] = useState('');
   const [uploaderName, setUploaderName] = useState('');
   const [projectTitle, setProjectTitle] = useState('');
+  const [projectDetails, setProjectDetails] = useState('');
   const [isProspectiveStudy, setIsProspectiveStudy] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -122,6 +123,7 @@ export function useDataProtectionWorkflow() {
         email,
         uploaderName,
         projectTitle,
+        projectDetails,
         institution: selectedInstitution || 'university',
         isProspectiveStudy,
         categories
@@ -142,6 +144,7 @@ export function useDataProtectionWorkflow() {
     setEmail('');
     setUploaderName('');
     setProjectTitle('');
+    setProjectDetails('');
     setIsProspectiveStudy(false);
     setCategories(prev => prev.map(cat => ({ ...cat, files: [] })));
     setShowSuccess(false);
@@ -161,6 +164,7 @@ export function useDataProtectionWorkflow() {
     email,
     uploaderName,
     projectTitle,
+    projectDetails,
     isProspectiveStudy,
     isSubmitting,
     showSuccess,
@@ -173,6 +177,7 @@ export function useDataProtectionWorkflow() {
     setEmail,
     setUploaderName,
     setProjectTitle,
+    setProjectDetails,
     setIsProspectiveStudy,
     
     // Handlers

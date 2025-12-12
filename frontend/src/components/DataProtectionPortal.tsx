@@ -20,6 +20,7 @@ export function DataProtectionPortal() {
     email,
     uploaderName,
     projectTitle,
+    projectDetails,
     isProspectiveStudy,
     isSubmitting,
     showSuccess,
@@ -32,6 +33,7 @@ export function DataProtectionPortal() {
     setEmail,
     setUploaderName,
     setProjectTitle,
+    setProjectDetails,
     setIsProspectiveStudy,
     
     // Handlers
@@ -73,6 +75,21 @@ export function DataProtectionPortal() {
       <ExistingProjectForm
         institution={selectedInstitution!}
         onBack={handleBackToProjectType}
+        email={email}
+        setEmail={setEmail}
+        uploaderName={uploaderName}
+        setUploaderName={setUploaderName}
+        projectTitle={projectTitle}
+        setProjectTitle={setProjectTitle}
+        projectDetails={projectDetails}
+        setProjectDetails={setProjectDetails}
+        categories={categories}
+        onFilesAdded={handleFilesAdded}
+        onFileRemoved={handleFileRemoved}
+        onSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+        errors={errors}
+        warnings={warnings}
       />
     );
   }

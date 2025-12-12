@@ -21,6 +21,7 @@ async def upload_documents(
     project_title: str = Form(...),
     institution: str = Form(...),
     is_prospective_study: bool = Form(False),
+    project_details: str = Form(None),
     files: List[UploadFile] = File(...),
     file_categories: str = Form(None)
 ):
@@ -81,6 +82,7 @@ async def upload_documents(
             "email": email,
             "uploader_name": uploader_name,
             "project_title": project_title,
+            "project_details": project_details,
             "institution": institution,
             "is_prospective_study": is_prospective_study,
             "upload_timestamp": datetime.now().isoformat(),
