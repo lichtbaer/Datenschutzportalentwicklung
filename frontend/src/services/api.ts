@@ -22,6 +22,12 @@ const API_TOKEN = import.meta.env.VITE_API_TOKEN;
 
 export const api = {
   upload: async (data: UploadData): Promise<UploadResult> => {
+    // Basic validation before even trying
+    if (!API_TOKEN) {
+      console.error('API_TOKEN is missing in environment variables');
+      throw new Error('Konfigurationsfehler: API Token fehlt. Bitte kontaktieren Sie den Administrator.');
+    }
+
     const formData = new FormData();
 
     // Add basic fields
@@ -56,8 +62,12 @@ export const api = {
       });
 
       if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          throw new Error('Authentifizierung fehlgeschlagen. Bitte überprüfen Sie das API-Token.');
+        }
+        
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || `Upload failed with status ${response.status}`);
+        throw new Error(errorData.detail || `Upload fehlgeschlagen (Status ${response.status})`);
       }
 
       const result = await response.json();
@@ -71,6 +81,7 @@ export const api = {
       };
     } catch (error) {
       console.error('Upload error:', error);
+      // Re-throw with user-friendly message if possible, or pass through
       throw error;
     }
   }
