@@ -8,11 +8,11 @@ class Settings(BaseSettings):
     api_debug: bool = False
     cors_origins: List[str] = ["http://localhost:3000"]
     
-    # Hessenbox
-    hessenbox_url: str
-    hessenbox_username: str
-    hessenbox_password: str
-    hessenbox_base_path: str = "/Datenschutzportal"
+    # Nextcloud
+    nextcloud_url: str
+    nextcloud_username: str
+    nextcloud_password: str
+    nextcloud_base_path: str = "/Datenschutzportal"
     
     # SMTP
     smtp_host: str

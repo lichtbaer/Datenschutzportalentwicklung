@@ -16,7 +16,7 @@ async def test_upload_documents():
             "is_prospective_study": False
         }
         
-        # Note: This test will fail if Hessenbox/SMTP are not configured or mocked
+        # Note: This test will fail if Nextcloud/SMTP are not configured or mocked
         # It serves as a structural test for now
         # response = await client.post("/api/upload", data=data, files=files)
         
