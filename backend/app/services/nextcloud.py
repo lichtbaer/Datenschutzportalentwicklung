@@ -15,20 +15,18 @@ class NextcloudService:
             'webdav_timeout': 30
         })
     
-    def create_folder(self, path: str) -> bool:
+    def create_folder(self, path: str) -> None:
         """
         Create a folder in Nextcloud
         """
         try:
             if not self.client.check(path):
                 self.client.mkdir(path)
-            return True
         except Exception as e:
             print(f"Error creating folder {path}: {e}")
-            # raise # Suppress for now to allow mock functionality if server not reachable
-            return False 
+            raise RuntimeError(f"Failed to create folder {path}: {str(e)}")
     
-    async def upload_file(self, file: UploadFile, remote_path: str) -> bool:
+    async def upload_file(self, file: UploadFile, remote_path: str) -> None:
         """
         Upload a file to Nextcloud
         """
@@ -45,13 +43,11 @@ class NextcloudService:
             # Clean up
             os.unlink(tmp_path)
             
-            return True
         except Exception as e:
             print(f"Error uploading file {file.filename}: {e}")
-            # raise
-            return False
+            raise RuntimeError(f"Failed to upload file {file.filename}: {str(e)}")
     
-    async def upload_metadata(self, metadata: Dict[Any, Any], remote_path: str) -> bool:
+    async def upload_metadata(self, metadata: Dict[Any, Any], remote_path: str) -> None:
         """
         Upload metadata JSON to Nextcloud
         """
@@ -63,13 +59,11 @@ class NextcloudService:
             self.client.upload_sync(remote_path=remote_path, local_path=tmp_path)
             os.unlink(tmp_path)
             
-            return True
         except Exception as e:
             print(f"Error uploading metadata: {e}")
-            # raise
-            return False
+            raise RuntimeError(f"Failed to upload metadata: {str(e)}")
 
-    async def upload_content(self, content: str, remote_path: str) -> bool:
+    async def upload_content(self, content: str, remote_path: str) -> None:
         """
         Upload text content to Nextcloud
         """
@@ -81,10 +75,9 @@ class NextcloudService:
             self.client.upload_sync(remote_path=remote_path, local_path=tmp_path)
             os.unlink(tmp_path)
             
-            return True
         except Exception as e:
             print(f"Error uploading content: {e}")
-            return False
+            raise RuntimeError(f"Failed to upload content: {str(e)}")
     
     async def get_metadata(self, project_id: str) -> Dict[Any, Any]:
         """

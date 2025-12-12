@@ -21,7 +21,7 @@ class EmailService:
         to_email: str,
         subject: str,
         html_content: str
-    ) -> bool:
+    ) -> None:
         """
         Send an email via SMTP
         """
@@ -43,11 +43,9 @@ class EmailService:
                 use_tls=True
             )
             
-            return True
         except Exception as e:
             print(f"Error sending email: {e}")
-            # raise
-            return False
+            raise RuntimeError(f"Failed to send email to {to_email}: {str(e)}")
 
     async def send_template_email(
         self,
@@ -55,21 +53,21 @@ class EmailService:
         subject: str,
         template_name: str,
         context: Dict[str, Any]
-    ) -> bool:
+    ) -> None:
         """
         Send an email using a Jinja2 template
         """
         if not self.template_env:
             print("Template environment not initialized")
-            return False
+            raise RuntimeError("Email template environment not initialized")
             
         try:
             template = self.template_env.get_template(template_name)
             html_content = template.render(**context)
-            return await self.send_email(to_email, subject, html_content)
+            await self.send_email(to_email, subject, html_content)
         except Exception as e:
             print(f"Error rendering template {template_name}: {e}")
-            return False
+            raise RuntimeError(f"Failed to render/send template email {template_name}: {str(e)}")
     
     async def send_confirmation_email(
         self,
@@ -78,7 +76,7 @@ class EmailService:
         project_title: str,
         uploader_name: str,
         files: List[Dict]
-    ) -> bool:
+    ) -> None:
         """
         Send confirmation email to user
         """
@@ -93,7 +91,7 @@ class EmailService:
             "timestamp": datetime.now().strftime("%d.%m.%Y %H:%M")
         }
         
-        return await self.send_template_email(
+        await self.send_template_email(
             to_email,
             subject,
             "email_confirmation_de.html",
@@ -107,7 +105,7 @@ class EmailService:
         project_title: str,
         uploader_name: str,
         missing_items: List[str]
-    ) -> bool:
+    ) -> None:
         """
         Send email requesting missing documents
         """
@@ -121,7 +119,7 @@ class EmailService:
             "portal_url": "https://datenschutz.uni-frankfurt.de" # Should be in settings ideally
         }
         
-        return await self.send_template_email(
+        await self.send_template_email(
             to_email,
             subject,
             "missing_documents.html",
@@ -132,7 +130,7 @@ class EmailService:
         self,
         to_email: str,
         name: str
-    ) -> bool:
+    ) -> None:
         """
         Send general information email
         """
@@ -142,7 +140,7 @@ class EmailService:
             "name": name
         }
         
-        return await self.send_template_email(
+        await self.send_template_email(
             to_email,
             subject,
             "user_info.html",
@@ -156,7 +154,7 @@ class EmailService:
         uploader_email: str,
         institution: str,
         files_count: int
-    ) -> bool:
+    ) -> None:
         """
         Send notification to data protection team
         """
@@ -180,5 +178,3 @@ class EmailService:
         # Send to all team members
         for email in settings.notification_emails:
             await self.send_email(email, subject, html_content)
-        
-        return True
