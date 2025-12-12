@@ -1,4 +1,5 @@
 import aiosmtplib
+import ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from jinja2 import Environment, FileSystemLoader
@@ -34,14 +35,26 @@ class EmailService:
             html_part = MIMEText(html_content, 'html')
             message.attach(html_part)
             
-            await aiosmtplib.send(
-                message,
-                hostname=settings.smtp_host,
-                port=settings.smtp_port,
-                username=settings.smtp_username,
-                password=settings.smtp_password,
-                use_tls=True
-            )
+            # Configure encryption based on settings
+            smtp_kwargs = {
+                "hostname": settings.smtp_host,
+                "port": settings.smtp_port,
+                "username": settings.smtp_username,
+                "password": settings.smtp_password,
+            }
+            
+            if settings.smtp_encryption == "starttls":
+                smtp_kwargs["use_tls"] = True
+                smtp_kwargs["start_tls"] = True
+            elif settings.smtp_encryption == "ssl":
+                smtp_kwargs["use_tls"] = False
+                smtp_kwargs["start_tls"] = False
+                smtp_kwargs["ssl_context"] = ssl.create_default_context()
+            else:  # none
+                smtp_kwargs["use_tls"] = False
+                smtp_kwargs["start_tls"] = False
+            
+            await aiosmtplib.send(message, **smtp_kwargs)
             
             return True
         except Exception as e:

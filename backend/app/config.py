@@ -1,12 +1,17 @@
 from pydantic_settings import BaseSettings
-from typing import List
+from typing import List, Literal
 
 class Settings(BaseSettings):
     # API
     api_host: str = "0.0.0.0"
     api_port: int = 8000
     api_debug: bool = False
-    cors_origins: List[str] = ["http://localhost:3000"]
+    cors_origins: List[str] = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
     
     # Nextcloud
     nextcloud_url: str
@@ -21,6 +26,13 @@ class Settings(BaseSettings):
     smtp_password: str
     smtp_from_email: str
     smtp_from_name: str = "Datenschutzportal"
+    smtp_encryption: Literal["starttls", "ssl", "none"] = "starttls"
+    
+    # IMAP
+    imap_host: str
+    imap_port: int = 993
+    imap_user: str
+    imap_password: str
     
     # Notifications
     notification_emails: List[str]

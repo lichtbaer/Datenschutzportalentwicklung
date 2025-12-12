@@ -29,7 +29,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - VITE_API_URL=http://localhost:8000/api
+      - VITE_API_URL=http://127.0.0.1:8000/api
       - VITE_API_TOKEN=${VITE_API_TOKEN:-test-api-token-for-local-development}
     volumes:
       # Mount source code for hot reload
