@@ -1,5 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
-from typing import List
+from typing import List, Dict, Optional
 from app.services.nextcloud import NextcloudService
 from app.services.email_service import EmailService
 from app.models.upload import UploadResponse
@@ -7,6 +7,7 @@ from app.config import settings
 import uuid
 from datetime import datetime
 import os
+import json
 
 router = APIRouter()
 nextcloud = NextcloudService()
@@ -19,7 +20,8 @@ async def upload_documents(
     project_title: str = Form(...),
     institution: str = Form(...),
     is_prospective_study: bool = Form(False),
-    files: List[UploadFile] = File(...)
+    files: List[UploadFile] = File(...),
+    file_categories: str = Form(None)
 ):
     """
     Upload data protection documents to Nextcloud
@@ -27,6 +29,14 @@ async def upload_documents(
     try:
         # Generate unique Project ID
         project_id = f"PRJ-{datetime.now().year}-{str(uuid.uuid4())[:8].upper()}"
+        
+        # Parse categories if provided
+        categories_map = {}
+        if file_categories:
+            try:
+                categories_map = json.loads(file_categories)
+            except:
+                pass
         
         # Validate files
         for file in files:
@@ -50,15 +60,7 @@ async def upload_documents(
         # Upload files by category
         uploaded_files = []
         for file in files:
-            # Note: In a real scenario, category should be passed along with the file
-            # or parsed from form data. For now defaulting to 'sonstiges' or extracting if possible.
-            # The current frontend implementation appends 'files_{category}' which might need 
-            # adjustment in the backend to parse correctly if sent as a list of files under different keys.
-            # Assuming here for simplicity metadata is available or passed. 
-            # In the frontend code, we append `files_{cat.key}`. 
-            # This endpoint expects `files` list. We might need to adjust frontend or backend to match.
-            # For now, let's assume we can get it or default.
-            category = "sonstiges" # Placeholder logic
+            category = categories_map.get(file.filename, "sonstiges")
             
             category_path = f"{project_path}/{category}"
             nextcloud.create_folder(category_path)
