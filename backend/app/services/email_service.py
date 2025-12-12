@@ -2,19 +2,24 @@ import aiosmtplib
 import ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 from app.config import settings
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 class EmailService:
     def __init__(self):
         # Ensure templates directory exists or handle missing templates gracefully
         try:
             self.template_env = Environment(
-                loader=FileSystemLoader('app/templates')
+                loader=FileSystemLoader('app/templates'),
+                autoescape=select_autoescape(['html', 'xml'])
             )
-        except:
+        except Exception as e:
+            logger.error(f"Failed to initialize Jinja2 environment: {e}")
             self.template_env = None
     
     async def send_email(

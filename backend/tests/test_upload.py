@@ -59,7 +59,7 @@ async def test_upload_documents():
             
             assert response.status_code == 200
             result = response.json()
-            assert result["success"] == True
+            assert result["success"]
             assert "project_id" in result
             assert result["files_uploaded"] == 2
             

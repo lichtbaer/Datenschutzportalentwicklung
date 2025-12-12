@@ -106,7 +106,7 @@ class NextcloudService:
             if tmp_path and os.path.exists(tmp_path):
                 try:
                     os.unlink(tmp_path)
-                except:
+                except OSError:
                     pass
             return False
     
@@ -133,7 +133,7 @@ class NextcloudService:
             if tmp_path and os.path.exists(tmp_path):
                 try:
                     os.unlink(tmp_path)
-                except:
+                except OSError:
                     pass
             return False
 
@@ -160,7 +160,7 @@ class NextcloudService:
             if tmp_path and os.path.exists(tmp_path):
                 try:
                     os.unlink(tmp_path)
-                except:
+                except OSError:
                     pass
             return False
     
@@ -199,7 +199,7 @@ class NextcloudService:
             if tmp_path and os.path.exists(tmp_path):
                 try:
                     os.unlink(tmp_path)
-                except:
+                except OSError:
                     pass
             raise
     
