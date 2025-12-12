@@ -5,6 +5,9 @@ site_author: Universität Frankfurt
 repo_url: https://github.com/example/repo
 repo_name: Datenschutzportal
 
+docs_dir: mkdocs
+site_dir: docs
+
 plugins:
   - search
   - mermaid2
