@@ -102,17 +102,17 @@ export function FileUploadSection({
           {category.files.map((file, index) => (
             <div
               key={index}
-              className="flex items-center justify-between bg-gray-50 rounded-lg p-3 border border-gray-200"
+              className="flex items-center justify-between bg-blue-50 rounded-lg p-3 border border-blue-200"
             >
               <div className="flex items-center gap-3 flex-1 min-w-0">
                 {isZipFile(file.name) ? (
                   <FileArchive className="w-5 h-5 text-blue-600 flex-shrink-0" />
                 ) : (
-                  <FileText className="w-5 h-5 text-gray-600 flex-shrink-0" />
+                  <FileText className="w-5 h-5 text-blue-600 flex-shrink-0" />
                 )}
                 <div className="min-w-0 flex-1">
-                  <p className="text-gray-900 truncate">{file.name}</p>
-                  <p className="text-gray-500 text-sm">{formatFileSize(file.size)}</p>
+                  <p className="text-blue-900 truncate">{file.name}</p>
+                  <p className="text-blue-700 text-sm">{formatFileSize(file.size)}</p>
                 </div>
               </div>
               <div className="flex items-center gap-1 ml-2">
