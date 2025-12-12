@@ -6,18 +6,18 @@ from fastapi import UploadFile
 import tempfile
 import os
 
-class HessenboxService:
+class NextcloudService:
     def __init__(self):
         self.client = Client({
-            'webdav_hostname': settings.hessenbox_url,
-            'webdav_login': settings.hessenbox_username,
-            'webdav_password': settings.hessenbox_password,
+            'webdav_hostname': settings.nextcloud_url,
+            'webdav_login': settings.nextcloud_username,
+            'webdav_password': settings.nextcloud_password,
             'webdav_timeout': 30
         })
     
     def create_folder(self, path: str) -> bool:
         """
-        Create a folder in Hessenbox
+        Create a folder in Nextcloud
         """
         try:
             if not self.client.check(path):
@@ -30,7 +30,7 @@ class HessenboxService:
     
     async def upload_file(self, file: UploadFile, remote_path: str) -> bool:
         """
-        Upload a file to Hessenbox
+        Upload a file to Nextcloud
         """
         try:
             # Save to temporary file
@@ -39,7 +39,7 @@ class HessenboxService:
                 tmp_file.write(content)
                 tmp_path = tmp_file.name
             
-            # Upload to Hessenbox
+            # Upload to Nextcloud
             self.client.upload_sync(remote_path=remote_path, local_path=tmp_path)
             
             # Clean up
@@ -53,7 +53,7 @@ class HessenboxService:
     
     async def upload_metadata(self, metadata: Dict[Any, Any], remote_path: str) -> bool:
         """
-        Upload metadata JSON to Hessenbox
+        Upload metadata JSON to Nextcloud
         """
         try:
             with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as tmp_file:
@@ -71,12 +71,12 @@ class HessenboxService:
     
     async def get_metadata(self, project_id: str) -> Dict[Any, Any]:
         """
-        Retrieve project metadata from Hessenbox
+        Retrieve project metadata from Nextcloud
         """
         try:
             # Search in both university and clinic folders
             for institution in ['university', 'clinic']:
-                path = f"{settings.hessenbox_base_path}/{institution}/{project_id}/metadata.json"
+                path = f"{settings.nextcloud_base_path}/{institution}/{project_id}/metadata.json"
                 if self.client.check(path):
                     with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
                         tmp_path = tmp_file.name
@@ -96,7 +96,7 @@ class HessenboxService:
     
     def list_files(self, path: str) -> list:
         """
-        List files in a Hessenbox directory
+        List files in a Nextcloud directory
         """
         try:
             return self.client.list(path)

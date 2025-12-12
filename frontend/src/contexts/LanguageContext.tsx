@@ -50,7 +50,7 @@ const translations = {
     
     // Form
     'form.title': 'Datenschutzportal',
-    'form.info': 'Bitte laden Sie alle erforderlichen datenschutzrelevanten Dokumente für Ihr Forschungsprojekt hoch. Die Dokumente werden sicher in der Hessenbox gespeichert. Sie erhalten eine Bestätigungsmail nach erfolgreichem Upload.',
+    'form.info': 'Bitte laden Sie alle erforderlichen datenschutzrelevanten Dokumente für Ihr Forschungsprojekt hoch. Die Dokumente werden sicher in der Nextcloud gespeichert. Sie erhalten eine Bestätigungsmail nach erfolgreichem Upload.',
     'form.baseData': 'Basisdaten',
     'form.email': 'E-Mail-Adresse',
     'form.uploaderName': 'Name des Uploaders (optional)',
@@ -97,7 +97,7 @@ const translations = {
     
     // Confirmation
     'confirmation.success': 'Upload erfolgreich abgeschlossen!',
-    'confirmation.message': 'Ihre Dokumente wurden erfolgreich hochgeladen und in der Hessenbox gespeichert. Eine Bestätigungs-E-Mail wurde an Ihre E-Mail-Adresse versendet.',
+    'confirmation.message': 'Ihre Dokumente wurden erfolgreich hochgeladen und in der Nextcloud gespeichert. Eine Bestätigungs-E-Mail wurde an Ihre E-Mail-Adresse versendet.',
     'confirmation.details': 'Upload-Details',
     'confirmation.projectTitle': 'Projekttitel',
     'confirmation.uploader': 'Uploader',
@@ -159,7 +159,7 @@ const translations = {
     
     // Form
     'form.title': 'Data Protection Portal',
-    'form.info': 'Please upload all required data protection documents for your research project. The documents will be securely stored in Hessenbox. You will receive a confirmation email after successful upload.',
+    'form.info': 'Please upload all required data protection documents for your research project. The documents will be securely stored in Nextcloud. You will receive a confirmation email after successful upload.',
     'form.baseData': 'Basic Data',
     'form.email': 'Email Address',
     'form.uploaderName': 'Uploader Name (optional)',
@@ -206,7 +206,7 @@ const translations = {
     
     // Confirmation
     'confirmation.success': 'Upload Completed Successfully!',
-    'confirmation.message': 'Your documents have been successfully uploaded and stored in Hessenbox. A confirmation email has been sent to your email address.',
+    'confirmation.message': 'Your documents have been successfully uploaded and stored in Nextcloud. A confirmation email has been sent to your email address.',
     'confirmation.details': 'Upload Details',
     'confirmation.projectTitle': 'Project Title',
     'confirmation.uploader': 'Uploader',

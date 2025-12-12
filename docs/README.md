@@ -37,7 +37,7 @@ Das Datenschutzportal ist eine webbasierte Anwendung für Forscher der Universit
 
 ### 🚧 Geplante Features (Backend)
 
-- **Hessenbox-Integration**: Sichere Speicherung via WebDAV
+- **Nextcloud-Integration**: Sichere Speicherung via WebDAV
 - **E-Mail-Benachrichtigungen**: Automatische Bestätigungs-E-Mails
 - **Projekt-Verwaltung**: Suche und Bearbeitung bestehender Projekte
 - **Audit-Logging**: Protokollierung aller Upload-Aktivitäten
@@ -54,7 +54,7 @@ Das Datenschutzportal ist eine webbasierte Anwendung für Forscher der Universit
 
 ### Backend (geplant)
 - **Python FastAPI** für REST API
-- **Hessenbox WebDAV** für Dateispeicherung
+- **Nextcloud WebDAV** für Dateispeicherung
 - **SMTP** für E-Mail-Versand
 - **Docker** für Deployment
 

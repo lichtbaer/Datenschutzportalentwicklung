@@ -192,7 +192,7 @@ const { t } = useLanguage();
 
 ### WebDAV Client
 - **Library**: `webdavclient3` oder `easywebdav`
-- **Verwendung**: Hessenbox Integration
+- **Verwendung**: Nextcloud Integration
 - **Operationen**:
   - Upload Files
   - Create Directories

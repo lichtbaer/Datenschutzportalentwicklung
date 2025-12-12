@@ -365,7 +365,7 @@ Service Call (api.upload)
     ↓
 [TODO] API Call zu FastAPI
     ↓
-[TODO] Hessenbox Upload
+[TODO] Nextcloud Upload
     ↓
 [TODO] E-Mail senden
     ↓

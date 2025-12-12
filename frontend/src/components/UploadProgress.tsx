@@ -79,7 +79,7 @@ export function UploadProgress({ isUploading, filesCount }: UploadProgressProps)
           <div className="mt-4 text-gray-500 text-sm">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" />
-              <span>Verbindung zur Hessenbox wird hergestellt...</span>
+              <span>Verbindung zur Nextcloud wird hergestellt...</span>
             </div>
           </div>
         )}

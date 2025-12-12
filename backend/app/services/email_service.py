@@ -100,7 +100,7 @@ class EmailService:
             <p><strong>Institution:</strong> {institution}</p>
             <p><strong>Uploader E-Mail:</strong> {uploader_email}</p>
             <p><strong>Anzahl Dateien:</strong> {files_count}</p>
-            <p><a href="{settings.hessenbox_url}">Zur Hessenbox</a></p>
+            <p><a href="{settings.nextcloud_url}">Zur Nextcloud</a></p>
         </body>
         </html>
         """
