@@ -1,11 +1,10 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends
-from typing import List, Dict, Optional
+from typing import List
 from app.services.nextcloud import NextcloudService
 from app.services.email_service import EmailService
 from app.models.upload import UploadResponse
 from app.config import settings
 from app.utils.auth import verify_token
-import uuid
 from datetime import datetime
 import os
 import json
@@ -236,5 +235,5 @@ async def get_upload_status(project_id: str):
     try:
         metadata = await nextcloud.get_metadata(project_id)
         return metadata
-    except Exception as e:
+    except Exception:
         raise HTTPException(status_code=404, detail="Project not found")
