@@ -1,0 +1,65 @@
+site_name: Datenschutzportal Dokumentation
+site_description: Dokumentation für das Datenschutzportal der Universität Frankfurt & Universitätsklinikum Frankfurt
+site_author: Universität Frankfurt
+
+repo_url: https://github.com/example/repo
+repo_name: Datenschutzportal
+
+theme:
+  name: material
+  language: de
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - content.code.copy
+    - content.tabs.link
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Backend:
+    - Setup: backend/setup.md
+    - API: backend/api.md
+  - Frontend:
+    - Architektur: frontend/architecture.md
+    - Übersetzungen: frontend/translations.md
+  - Deployment:
+    - Guide: deployment/index.md
+    - Tech Stack: deployment/tech_stack.md
+  - Guidelines:
+    - Contributing: guidelines/contributing.md
+    - General: guidelines/general.md
+  - Changelog: CHANGELOG.md
