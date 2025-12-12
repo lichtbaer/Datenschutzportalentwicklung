@@ -122,6 +122,7 @@ export function useDataProtectionWorkflow() {
         email,
         uploaderName,
         projectTitle,
+        institution: selectedInstitution || 'university',
         isProspectiveStudy,
         categories
       });
