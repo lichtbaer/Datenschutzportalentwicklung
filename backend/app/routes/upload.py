@@ -92,9 +92,22 @@ async def upload_documents(
         # Create project folder structure
         project_path = f"{settings.nextcloud_base_path}/{institution}/{project_id}"
         logger.info(f"Creating project folder: {project_path}")
+        
+        # Test connection before attempting folder creation
+        connection_ok, connection_msg = nextcloud.test_connection()
+        if not connection_ok:
+            logger.error(f"Nextcloud connection failed: {connection_msg}")
+            raise HTTPException(
+                status_code=503,
+                detail=f"Nextcloud connection failed. Please check Nextcloud configuration and credentials. Error: {connection_msg}"
+            )
+        
         if not nextcloud.create_folder(project_path):
             logger.error(f"Failed to create project folder: {project_path}")
-            raise HTTPException(status_code=500, detail="Failed to create project folder in Nextcloud")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to create project folder in Nextcloud at path: {project_path}. Please check Nextcloud permissions and ensure the base path exists."
+            )
         
         # Upload files by category
         uploaded_files = []

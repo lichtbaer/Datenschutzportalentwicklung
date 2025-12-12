@@ -1,7 +1,7 @@
 from webdav3.client import Client
 from app.config import settings
 import json
-from typing import Dict, Any
+from typing import Dict, Any, Tuple
 from fastapi import UploadFile
 import tempfile
 import os
@@ -18,17 +18,60 @@ class NextcloudService:
             'webdav_timeout': 30
         })
     
-    def create_folder(self, path: str) -> bool:
+    def test_connection(self) -> Tuple[bool, str]:
         """
-        Create a folder in Nextcloud
+        Test the connection to Nextcloud and verify credentials.
+        Returns (success: bool, message: str)
         """
         try:
-            if not self.client.check(path):
-                logger.debug(f"Creating folder: {path}")
-                self.client.mkdir(path)
-                logger.debug(f"Successfully created folder: {path}")
-            else:
-                logger.debug(f"Folder already exists: {path}")
+            # Try to list the root directory to verify connection
+            self.client.list('/')
+            logger.info("Nextcloud connection test successful")
+            return True, "Connection successful"
+        except Exception as e:
+            error_msg = f"Failed to connect to Nextcloud: {e}"
+            logger.error(error_msg, exc_info=True)
+            return False, error_msg
+    
+    def create_folder(self, path: str) -> bool:
+        """
+        Create a folder in Nextcloud, including all parent directories if needed.
+        """
+        try:
+            # Normalize path: remove leading/trailing slashes and split
+            normalized_path = path.strip('/')
+            if not normalized_path:
+                logger.error("Empty path provided for folder creation")
+                return False
+            
+            path_parts = normalized_path.split('/')
+            
+            # Create each directory in the path hierarchy
+            current_path = ""
+            for part in path_parts:
+                if not part:
+                    continue
+                    
+                if current_path:
+                    current_path = f"{current_path}/{part}"
+                else:
+                    current_path = part
+                
+                # Ensure path starts with / for WebDAV
+                full_path = f"/{current_path}"
+                
+                try:
+                    if not self.client.check(full_path):
+                        logger.debug(f"Creating folder: {full_path}")
+                        self.client.mkdir(full_path)
+                        logger.debug(f"Successfully created folder: {full_path}")
+                    else:
+                        logger.debug(f"Folder already exists: {full_path}")
+                except Exception as e:
+                    logger.error(f"Error creating intermediate folder {full_path}: {e}", exc_info=True)
+                    raise
+            
+            logger.info(f"Successfully ensured folder structure exists: {path}")
             return True
         except Exception as e:
             logger.error(f"Error creating folder {path}: {e}", exc_info=True)
