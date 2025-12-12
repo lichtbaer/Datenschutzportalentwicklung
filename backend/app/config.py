@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     
     # Security
     secret_key: str
+    api_token: str
     algorithm: str = "HS256"
     
     # File Upload

@@ -1,9 +1,10 @@
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends
 from typing import List, Dict, Optional
 from app.services.nextcloud import NextcloudService
 from app.services.email_service import EmailService
 from app.models.upload import UploadResponse
 from app.config import settings
+from app.utils.auth import verify_token
 import uuid
 from datetime import datetime
 import os
@@ -13,7 +14,7 @@ router = APIRouter()
 nextcloud = NextcloudService()
 email_service = EmailService()
 
-@router.post("/upload", response_model=UploadResponse)
+@router.post("/upload", response_model=UploadResponse, dependencies=[Depends(verify_token)])
 async def upload_documents(
     email: str = Form(...),
     uploader_name: str = Form(None),
@@ -117,7 +118,7 @@ async def upload_documents(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/upload/status/{project_id}")
+@router.get("/upload/status/{project_id}", dependencies=[Depends(verify_token)])
 async def get_upload_status(project_id: str):
     """
     Get upload status for a project

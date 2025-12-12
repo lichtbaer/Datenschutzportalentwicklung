@@ -2,6 +2,7 @@ import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 from unittest.mock import MagicMock, patch, AsyncMock
+from app.config import settings
 import json
 
 @pytest.mark.asyncio
@@ -39,7 +40,19 @@ async def test_upload_documents():
                 "file_categories": json.dumps(categories_map)
             }
             
+            # Test without token (should fail)
             response = await client.post("/api/upload", data=data, files=files)
+            assert response.status_code in [401, 403] # Depends on exact failure (missing vs invalid)
+            
+            # Test with token
+            headers = {"Authorization": f"Bearer {settings.api_token}"}
+            # We need to recreate files iterator as it was consumed
+            files = [
+                ("files", ("test.pdf", b"fake pdf content", "application/pdf")),
+                ("files", ("concept.pdf", b"fake concept", "application/pdf"))
+            ]
+            
+            response = await client.post("/api/upload", data=data, files=files, headers=headers)
             
             if response.status_code != 200:
                 print(f"Response error: {response.text}")
