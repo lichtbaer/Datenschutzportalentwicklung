@@ -649,7 +649,7 @@ async def test_upload_documents():
 
 ## Deployment
 
-Siehe [DEPLOYMENT.md](./DEPLOYMENT.md) für detaillierte Deployment-Anleitung.
+Siehe [Deployment Guide](../deployment/index.md) für detaillierte Deployment-Anleitung.
 
 ## Nächste Schritte
 
