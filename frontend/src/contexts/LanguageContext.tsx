@@ -83,6 +83,7 @@ const translations = {
     'category.schulung_ukf': 'Schulung UKF Nachweis',
     'category.einwilligung': 'Einwilligungsformular(e)/PatInfo(s)',
     'category.ethikvotum': 'Ethikvotum',
+    'category.documents': 'Dokumente',
     'category.sonstiges': 'Sonstiges',
     'category.sonstiges.desc': 'Darstellungen/Dokumente zum Datenfluss (wenn vorhanden), oder bei Verwendung von Fragebögen die Fragen. Wenn Sie den Datenfluss nicht im DSK beschrieben haben, laden Sie das Dokument hier hoch.',
     
@@ -246,6 +247,7 @@ const translations = {
     'category.schulung_ukf': 'UKF Training Certificate',
     'category.einwilligung': 'Consent Form(s)/PatInfo(s)',
     'category.ethikvotum': 'Ethics Approval',
+    'category.documents': 'Documents',
     'category.sonstiges': 'Other',
     'category.sonstiges.desc': 'Data flow documents (if available), or questions if questionnaires are used. If you have not described the data flow in the data protection concept, please upload the document here.',
     

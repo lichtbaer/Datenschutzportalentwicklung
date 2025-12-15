@@ -3,6 +3,20 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { FileCategory, Institution, ProjectType, WorkflowStep } from '../types';
 import { api, ApiError } from '../services/api';
 
+const NEW_PROJECT_CATEGORIES: FileCategory[] = [
+  { key: 'datenschutzkonzept', label: 'datenschutzkonzept', required: true, files: [] },
+  { key: 'verantwortung', label: 'verantwortung', required: true, files: [] },
+  { key: 'schulung_uni', label: 'schulung_uni', required: true, files: [] },
+  { key: 'schulung_ukf', label: 'schulung_ukf', required: true, files: [] },
+  { key: 'einwilligung', label: 'einwilligung', required: false, conditionalRequired: true, files: [] },
+  { key: 'ethikvotum', label: 'ethikvotum', required: false, files: [] },
+  { key: 'sonstiges', label: 'sonstiges', required: false, files: [] },
+];
+
+const EXISTING_PROJECT_CATEGORIES: FileCategory[] = [
+  { key: 'documents', label: 'documents', required: false, files: [] }
+];
+
 export function useDataProtectionWorkflow() {
   const { t } = useLanguage();
 
@@ -23,16 +37,7 @@ export function useDataProtectionWorkflow() {
   const [errors, setErrors] = useState<string[]>([]);
   const [warnings, setWarnings] = useState<string[]>([]);
 
-  const [categories, setCategories] = useState<FileCategory[]>([
-    // Store a stable label value; UI text is always derived via i18n keys.
-    { key: 'datenschutzkonzept', label: 'datenschutzkonzept', required: true, files: [] },
-    { key: 'verantwortung', label: 'verantwortung', required: true, files: [] },
-    { key: 'schulung_uni', label: 'schulung_uni', required: true, files: [] },
-    { key: 'schulung_ukf', label: 'schulung_ukf', required: true, files: [] },
-    { key: 'einwilligung', label: 'einwilligung', required: false, conditionalRequired: true, files: [] },
-    { key: 'ethikvotum', label: 'ethikvotum', required: false, files: [] },
-    { key: 'sonstiges', label: 'sonstiges', required: false, files: [] },
-  ]);
+  const [categories, setCategories] = useState<FileCategory[]>(NEW_PROJECT_CATEGORIES);
 
   // Workflow handlers
   const handleInstitutionSelect = (institution: Institution) => {
@@ -43,8 +48,12 @@ export function useDataProtectionWorkflow() {
   const handleProjectTypeSelect = (type: ProjectType) => {
     setSelectedProjectType(type);
     if (type === 'new') {
+      // Reset categories to new project structure, preserving files if relevant (but likely not if switching types)
+      // Usually better to reset files when switching types to avoid confusion
+      setCategories(NEW_PROJECT_CATEGORIES.map(cat => ({...cat, files: []})));
       setCurrentStep('form');
     } else {
+      setCategories(EXISTING_PROJECT_CATEGORIES.map(cat => ({...cat, files: []})));
       setCurrentStep('existingProject');
     }
   };
@@ -187,7 +196,10 @@ export function useDataProtectionWorkflow() {
     setProjectTitle('');
     setProjectDetails('');
     setIsProspectiveStudy(false);
-    setCategories(prev => prev.map(cat => ({ ...cat, files: [] })));
+    // Reset to NEW_PROJECT_CATEGORIES by default or empty. 
+    // Since we go back to projectType selection, it will be reset there anyway.
+    // But for safety:
+    setCategories(NEW_PROJECT_CATEGORIES.map(cat => ({ ...cat, files: [] })));
     setShowSuccess(false);
     setUploadTimestamp('');
     setErrors([]);

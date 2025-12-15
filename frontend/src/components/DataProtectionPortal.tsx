@@ -64,6 +64,30 @@ export function DataProtectionPortal() {
   };
 
   // Render different steps
+
+  // If the upload was successful, show the confirmation page
+  if (showSuccess) {
+    const uploadedFiles = categories
+      .filter(cat => cat.files.length > 0)
+      .flatMap(cat =>
+        cat.files.map(file => ({
+          categoryKey: cat.key,
+          fileName: file.name,
+        }))
+      );
+
+    return (
+      <ConfirmationPage
+        email={email}
+        uploaderName={uploaderName}
+        projectTitle={projectTitle}
+        uploadedFiles={uploadedFiles}
+        uploadTimestamp={uploadTimestamp}
+        onNewUpload={handleNewUpload}
+      />
+    );
+  }
+
   if (currentStep === 'projectType') {
     return (
       <ProjectTypeSelection
@@ -96,29 +120,6 @@ export function DataProtectionPortal() {
     );
   }
 
-
-  // If the upload was successful, show the confirmation page
-  if (showSuccess) {
-    const uploadedFiles = categories
-      .filter(cat => cat.files.length > 0)
-      .flatMap(cat =>
-        cat.files.map(file => ({
-          categoryKey: cat.key,
-          fileName: file.name,
-        }))
-      );
-
-    return (
-      <ConfirmationPage
-        email={email}
-        uploaderName={uploaderName}
-        projectTitle={projectTitle}
-        uploadedFiles={uploadedFiles}
-        uploadTimestamp={uploadTimestamp}
-        onNewUpload={handleNewUpload}
-      />
-    );
-  }
 
   const allErrors = [...errors, ...localErrors];
 
