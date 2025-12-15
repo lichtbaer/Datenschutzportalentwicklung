@@ -84,6 +84,7 @@ const translations = {
     'category.einwilligung': 'Einwilligungsformular(e)/PatInfo(s)',
     'category.ethikvotum': 'Ethikvotum',
     'category.sonstiges': 'Sonstiges',
+    'category.nachzureichende_daten': 'Nachzureichende Unterlagen',
     'category.sonstiges.desc': 'Darstellungen/Dokumente zum Datenfluss (wenn vorhanden), oder bei Verwendung von Fragebögen die Fragen. Wenn Sie den Datenfluss nicht im DSK beschrieben haben, laden Sie das Dokument hier hoch.',
     
     // File Upload
@@ -247,6 +248,7 @@ const translations = {
     'category.einwilligung': 'Consent Form(s)/PatInfo(s)',
     'category.ethikvotum': 'Ethics Approval',
     'category.sonstiges': 'Other',
+    'category.nachzureichende_daten': 'Documents to be submitted later',
     'category.sonstiges.desc': 'Data flow documents (if available), or questions if questionnaires are used. If you have not described the data flow in the data protection concept, please upload the document here.',
     
     // File Upload

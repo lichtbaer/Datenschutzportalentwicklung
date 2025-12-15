@@ -3,6 +3,26 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { FileCategory, Institution, ProjectType, WorkflowStep } from '../types';
 import { api, ApiError } from '../services/api';
 
+function createNewProjectCategories(): FileCategory[] {
+  return [
+    // Store a stable label value; UI text is always derived via i18n keys.
+    { key: 'datenschutzkonzept', label: 'datenschutzkonzept', required: true, files: [] },
+    { key: 'verantwortung', label: 'verantwortung', required: true, files: [] },
+    { key: 'schulung_uni', label: 'schulung_uni', required: true, files: [] },
+    { key: 'schulung_ukf', label: 'schulung_ukf', required: true, files: [] },
+    { key: 'einwilligung', label: 'einwilligung', required: false, conditionalRequired: true, files: [] },
+    { key: 'ethikvotum', label: 'ethikvotum', required: false, files: [] },
+    { key: 'sonstiges', label: 'sonstiges', required: false, files: [] },
+  ];
+}
+
+function createExistingProjectCategories(): FileCategory[] {
+  return [
+    // Single upload bucket for resubmissions / missing documents.
+    { key: 'nachzureichende_daten', label: 'nachzureichende_daten', required: true, files: [] },
+  ];
+}
+
 export function useDataProtectionWorkflow() {
   const { t } = useLanguage();
 
@@ -23,16 +43,7 @@ export function useDataProtectionWorkflow() {
   const [errors, setErrors] = useState<string[]>([]);
   const [warnings, setWarnings] = useState<string[]>([]);
 
-  const [categories, setCategories] = useState<FileCategory[]>([
-    // Store a stable label value; UI text is always derived via i18n keys.
-    { key: 'datenschutzkonzept', label: 'datenschutzkonzept', required: true, files: [] },
-    { key: 'verantwortung', label: 'verantwortung', required: true, files: [] },
-    { key: 'schulung_uni', label: 'schulung_uni', required: true, files: [] },
-    { key: 'schulung_ukf', label: 'schulung_ukf', required: true, files: [] },
-    { key: 'einwilligung', label: 'einwilligung', required: false, conditionalRequired: true, files: [] },
-    { key: 'ethikvotum', label: 'ethikvotum', required: false, files: [] },
-    { key: 'sonstiges', label: 'sonstiges', required: false, files: [] },
-  ]);
+  const [categories, setCategories] = useState<FileCategory[]>(() => createNewProjectCategories());
 
   // Workflow handlers
   const handleInstitutionSelect = (institution: Institution) => {
@@ -43,8 +54,10 @@ export function useDataProtectionWorkflow() {
   const handleProjectTypeSelect = (type: ProjectType) => {
     setSelectedProjectType(type);
     if (type === 'new') {
+      setCategories(createNewProjectCategories());
       setCurrentStep('form');
     } else {
+      setCategories(createExistingProjectCategories());
       setCurrentStep('existingProject');
     }
   };
@@ -59,6 +72,8 @@ export function useDataProtectionWorkflow() {
   const handleBackToProjectType = () => {
     setCurrentStep('projectType');
     setSelectedProjectType(null);
+    // Reset to default categories; the project type selection will set the final list again.
+    setCategories(createNewProjectCategories());
   };
 
   const handleFilesAdded = (categoryKey: string, newFiles: File[]) => {
@@ -187,7 +202,7 @@ export function useDataProtectionWorkflow() {
     setProjectTitle('');
     setProjectDetails('');
     setIsProspectiveStudy(false);
-    setCategories(prev => prev.map(cat => ({ ...cat, files: [] })));
+    setCategories(createNewProjectCategories());
     setShowSuccess(false);
     setUploadTimestamp('');
     setErrors([]);
