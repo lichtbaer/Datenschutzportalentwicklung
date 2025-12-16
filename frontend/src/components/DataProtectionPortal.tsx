@@ -161,19 +161,19 @@ export function DataProtectionPortal() {
           </div>
           
           <div className="border-t border-blue-200 pt-3 mt-2 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-            <a href="#" className="flex items-center gap-2 text-blue-700 hover:text-blue-900 hover:underline">
+            <a href="https://moodle.studiumdigitale.uni-frankfurt.de/moodle/course/view.php?id=5817" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-700 hover:text-blue-900 hover:underline">
               <ExternalLink className="w-4 h-4" />
               {t('link.moodle')}
             </a>
-            <a href="#" className="flex items-center gap-2 text-blue-700 hover:text-blue-900 hover:underline">
+            <a href="https://roxtra.kgu.de/Roxtra/doc/showfile.aspx?FileID=439942" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-700 hover:text-blue-900 hover:underline">
               <ExternalLink className="w-4 h-4" />
               {t('link.sop')}
             </a>
-            <a href="#" className="flex items-center gap-2 text-blue-700 hover:text-blue-900 hover:underline">
+            <a href="https://roxtra.kgu.de/Roxtra/doc/showfolder.aspx?FolderID=55917" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-700 hover:text-blue-900 hover:underline">
               <ExternalLink className="w-4 h-4" />
               {t('link.research')}
             </a>
-             <a href="mailto:datenschutz@uni-frankfurt.de" className="flex items-center gap-2 text-blue-700 hover:text-blue-900 hover:underline">
+            <a href="mailto:ForschungFB16@uni-frankfurt.de" className="flex items-center gap-2 text-blue-700 hover:text-blue-900 hover:underline">
               <Mail className="w-4 h-4" />
               {t('link.email')}
             </a>
