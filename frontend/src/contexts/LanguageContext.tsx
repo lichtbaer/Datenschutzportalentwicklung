@@ -71,9 +71,9 @@ const translations = {
     'form.legalConfirmation': 'Ich bestätige die rechtskonforme Nutzung der Daten.',
     
     // Links
-    'link.moodle': 'Moodle-Kurs',
+    'link.moodle': 'Moodle-Kurs (Schulung(en))',
     'link.sop': 'SOP (Standard Operating Procedures)',
-    'link.research': 'Forschungsportal',
+    'link.research': 'Roxtra Ordner Forschung',
     'link.email': 'E-Mail Datenschutz-Team',
     
     // Categories
@@ -235,9 +235,9 @@ const translations = {
     'form.legalConfirmation': 'I confirm the legally compliant use of the data.',
     
     // Links
-    'link.moodle': 'Moodle Course',
+    'link.moodle': 'Moodle Course (Training)',
     'link.sop': 'SOP (Standard Operating Procedures)',
-    'link.research': 'Research Portal',
+    'link.research': 'Roxtra Research Folder',
     'link.email': 'Data Protection Team Email',
     
     // Categories

@@ -239,7 +239,7 @@ SMTP_HOST=smtp.uni-frankfurt.de
 SMTP_PORT=587
 SMTP_USERNAME=datenschutz@uni-frankfurt.de
 SMTP_PASSWORD=secure_smtp_password
-SMTP_FROM_EMAIL=datenschutz@uni-frankfurt.de
+SMTP_FROM_EMAIL=ForschungFB16@uni-frankfurt.de
 SMTP_FROM_NAME=Datenschutzportal
 
 # Notification E-Mails (comma-separated)
