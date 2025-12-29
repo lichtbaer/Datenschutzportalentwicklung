@@ -49,8 +49,8 @@ const translations = {
     'existingProject.back': 'Zurück zur Auswahl',
     'existingProject.warning': 'Dies ist nur eine Option für Projekte, die nach dem neuen Prozess (gestartet im Mai) eingereicht wurden. Wenn Sie Ihr Projekt davor eingereicht haben und es neu einreichen wollen, reichen Sie es bitte neu ein. Für Amendments wenden Sie sich bitte per Mail an das Datenschutz-Team.',
     'existingProject.moreInfo': 'Weitere Informationen zur Einreichung finden Sie hier',
-    'existingProject.projectDetails': 'Projektdetails',
-    'existingProject.projectDetailsPlaceholder': 'Bitte beschreiben Sie hier Ihr Anliegen...',
+    'existingProject.projectDetails': 'Projektdetails:',
+    'existingProject.projectDetailsPlaceholder': 'Bitte fassen Sie kurz zusammen, was Sie überarbeitet haben, sodass wir uns schneller ein Bild machen können.',
     'existingProject.templates': 'Hier finden Sie Vorlagen für Nachreichungen',
     
     // Form
@@ -64,7 +64,7 @@ const translations = {
     'form.prospectiveStudy': 'Prospektive Studie / Prospektiver Anteil',
     'form.documents': 'Dokumente hochladen',
     'form.required': '*',
-    'form.emailPlaceholder': 'ihre.email@uni-frankfurt.de',
+    'form.emailPlaceholder': 'Ihre Dientstliche eMail',
     'form.namePlaceholder': 'Max Mustermann',
     'form.titlePlaceholder': 'Titel des Forschungsprojekts',
     'form.back': 'Zurück zur Auswahl',
@@ -213,8 +213,8 @@ const translations = {
     'existingProject.back': 'Back to Selection',
     'existingProject.warning': 'This is only an option for projects submitted after the new process (started in May). If you submitted your project before that and want to resubmit, please submit it as new. For amendments, please contact the data protection team by email.',
     'existingProject.moreInfo': 'Find more information about submission here',
-    'existingProject.projectDetails': 'Project Details',
-    'existingProject.projectDetailsPlaceholder': 'Please describe your request here...',
+    'existingProject.projectDetails': 'Project details:',
+    'existingProject.projectDetailsPlaceholder': 'Please briefly summarize what you have revised so we can get an overview more quickly.',
     'existingProject.templates': 'Here you can find templates for resubmissions',
     
     // Form
@@ -228,7 +228,7 @@ const translations = {
     'form.prospectiveStudy': 'Prospective Study / Prospective Component',
     'form.documents': 'Upload Documents',
     'form.required': '*',
-    'form.emailPlaceholder': 'your.email@uni-frankfurt.de',
+    'form.emailPlaceholder': 'Your work email',
     'form.namePlaceholder': 'John Doe',
     'form.titlePlaceholder': 'Title of Research Project',
     'form.back': 'Back to Selection',
