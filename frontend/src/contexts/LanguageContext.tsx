@@ -64,11 +64,11 @@ const translations = {
     'form.prospectiveStudy': 'Prospektive Studie / Prospektiver Anteil',
     'form.documents': 'Dokumente hochladen',
     'form.required': '*',
-    'form.emailPlaceholder': 'Ihre Dientstliche eMail',
+    'form.emailPlaceholder': 'Ihre dienstliche E-Mail-Adresse',
     'form.namePlaceholder': 'Max Mustermann',
     'form.titlePlaceholder': 'Titel des Forschungsprojekts',
     'form.back': 'Zurück zur Auswahl',
-    'form.legalConfirmation': 'Dokument: Verpflichtung zur Rechtskonformen Datennutzung',
+    'form.legalConfirmation': 'Dokument: Verpflichtung zur Rechtskonformen Datennutzung ',
     
     // Links
     'link.moodle': 'Moodle-Kurs (Schulung(en))',
@@ -78,7 +78,7 @@ const translations = {
     
     // Categories
     'category.datenschutzkonzept': 'Datenschutzkonzept',
-    'category.verantwortung': 'Dokument: Verpflichtung zur Rechtskonformen Datennutzung',
+    'category.verantwortung': 'Dokument: Verpflichtung zur Rechtskonformen Datennutzung ',
     'category.schulung_uni': 'Schulung Uni Nachweis',
     'category.schulung_ukf': 'Schulung UKF Nachweis',
     'category.einwilligung': 'Einwilligungsformular(e)/PatInfo(s)',

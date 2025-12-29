@@ -54,6 +54,7 @@ export function ExistingProjectForm({
   const [localErrors, setLocalErrors] = useState<string[]>([]);
 
   const institutionName = `${t('institution.university')} / ${t('institution.clinic')}`;
+  const dataProtectionEmail = 'ForschungFB16@uni-frankfurt.de';
 
   const totalFiles = categories.reduce((sum, cat) => sum + cat.files.length, 0);
 
@@ -64,6 +65,34 @@ export function ExistingProjectForm({
   };
 
   const allErrors = [...errors, ...localErrors];
+
+  const renderWarningWithEmailLink = () => {
+    const text = t('existingProject.warning');
+    const candidates = ['Mail', 'email'];
+
+    for (const word of candidates) {
+      const idx = text.indexOf(word);
+      if (idx === -1) continue;
+
+      const before = text.slice(0, idx);
+      const after = text.slice(idx + word.length);
+
+      return (
+        <>
+          {before}
+          <a
+            href={`mailto:${dataProtectionEmail}`}
+            className="underline hover:text-red-900"
+          >
+            {word}
+          </a>
+          {after}
+        </>
+      );
+    }
+
+    return text;
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-8 px-4">
@@ -97,7 +126,7 @@ export function ExistingProjectForm({
                 <div>
                     <h3 className="text-red-900 font-bold mb-2">{t('existingProject.infoTitle')}</h3>
                     <p className="text-red-800 font-bold">
-                        {t('existingProject.warning')}
+                        {renderWarningWithEmailLink()}
                     </p>
                     <a href="#" className="text-red-700 underline mt-2 block hover:text-red-900">
                         {t('existingProject.moreInfo')}
