@@ -90,7 +90,7 @@ const { t, language, setLanguage } = useLanguage();
 | `form.prospectiveStudy` | Prospektive Studie / Prospektiver Anteil | Prospective Study / Prospective Component |
 | `form.documents` | Dokumente hochladen | Upload Documents |
 | `form.required` | * | * |
-| `form.emailPlaceholder` | ihre.email@uni-frankfurt.de | your.email@uni-frankfurt.de |
+| `form.emailPlaceholder` | Ihre Dientstliche eMail | Your work email |
 | `form.namePlaceholder` | Max Mustermann | John Doe |
 | `form.titlePlaceholder` | Titel des Forschungsprojekts | Title of Research Project |
 | `form.back` | Zurück zur Auswahl | Back to Selection |
@@ -100,7 +100,7 @@ const { t, language, setLanguage } = useLanguage();
 | Key | DE | EN |
 |-----|----|----|
 | `category.datenschutzkonzept` | Datenschutzkonzept | Data Protection Concept |
-| `category.verantwortung` | Übernahme der Verantwortung | Assumption of Responsibility |
+| `category.verantwortung` | Dokument: Verpflichtung zur Rechtskonformen Datennutzung | Document: Commitment to legally compliant data use |
 | `category.schulung_uni` | Schulung Uni Nachweis | University Training Certificate |
 | `category.schulung_ukf` | Schulung UKF Nachweis | UKF Training Certificate |
 | `category.einwilligung` | Einwilligung | Consent |
