@@ -68,7 +68,7 @@ const translations = {
     'form.namePlaceholder': 'Max Mustermann',
     'form.titlePlaceholder': 'Titel des Forschungsprojekts',
     'form.back': 'Zurück zur Auswahl',
-    'form.legalConfirmation': 'Ich bestätige die rechtskonforme Nutzung der Daten.',
+    'form.legalConfirmation': 'Dokument: Verpflichtung zur Rechtskonformen Datennutzung',
     
     // Links
     'link.moodle': 'Moodle-Kurs (Schulung(en))',
@@ -78,7 +78,7 @@ const translations = {
     
     // Categories
     'category.datenschutzkonzept': 'Datenschutzkonzept',
-    'category.verantwortung': 'Ich bestätige die rechtskonforme Nutzung der Daten',
+    'category.verantwortung': 'Dokument: Verpflichtung zur Rechtskonformen Datennutzung',
     'category.schulung_uni': 'Schulung Uni Nachweis',
     'category.schulung_ukf': 'Schulung UKF Nachweis',
     'category.einwilligung': 'Einwilligungsformular(e)/PatInfo(s)',
