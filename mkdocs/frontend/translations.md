@@ -90,7 +90,7 @@ const { t, language, setLanguage } = useLanguage();
 | `form.prospectiveStudy` | Prospektive Studie / Prospektiver Anteil | Prospective Study / Prospective Component |
 | `form.documents` | Dokumente hochladen | Upload Documents |
 | `form.required` | * | * |
-| `form.emailPlaceholder` | Ihre Dientstliche eMail | Your work email |
+| `form.emailPlaceholder` | Ihre dienstliche E-Mail-Adresse | Your work email |
 | `form.namePlaceholder` | Max Mustermann | John Doe |
 | `form.titlePlaceholder` | Titel des Forschungsprojekts | Title of Research Project |
 | `form.back` | Zurück zur Auswahl | Back to Selection |
