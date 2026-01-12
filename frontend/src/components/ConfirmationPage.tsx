@@ -175,7 +175,7 @@ export function ConfirmationPage({
         {/* Footer Info */}
         <div className="mt-8 text-center text-gray-500 text-sm">
           <p>{t('confirmation.footer')}</p>
-          <p>{t('confirmation.institution')}</p>
+          <p>{t('confirmation.emailContact')}</p>
         </div>
       </div>
     </div>
