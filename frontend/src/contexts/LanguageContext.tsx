@@ -15,9 +15,9 @@ const translations = {
     'institution.subtitle': 'Willkommen beim Datenschutzportal für Forschungsprojekte',
     'institution.question': 'Zu welcher Institution gehören Sie?',
     'institution.description': 'Bitte wählen Sie die Institution aus, in deren Rahmen Sie Ihre Studie durchführen',
-    'institution.university': 'Goethe Universität Frankfurt(GU)',
+    'institution.university': 'Goethe-Universität Frankfurt (GU)',
     'institution.university.desc': 'Für Forschungsprojekte der Goethe-Universität Frankfurt am Main',
-    'institution.clinic': 'Universitätsmedizin Frankfurt(UMF)',
+    'institution.clinic': 'Universitätsmedizin Frankfurt (UMF)',
     'institution.clinic.desc': 'Für klinische Forschungsprojekte des Universitätsmedizin Frankfurt',
     'institution.footer': 'Bei Fragen zur richtigen Auswahl wenden Sie sich bitte an das Datenschutz-Team',
     
@@ -55,7 +55,7 @@ const translations = {
     
     // Form
     'form.title': 'Datenschutzportal für Forschungsvorhaben',
-    'form.info': 'Bitte laden Sie alle erforderlichen Dokumente für Ihr Forschungsprojekt hoch. Die Dokumente werden sicher in der next.Hessencloud gespeichert. Sie erhalten eine Bestätigungs-E-Mail nach erfolgreichem Upload.',
+    'form.info': 'Bitte laden Sie alle erforderlichen Dokumente für Ihr Forschungsprojekt hoch. Die Dokumente werden sicher in der next.Hessencloud gespeichert. Sie erhalten eine Bestätigungs-E-Mail nach erfolgreichem Upload. Diese Mail gilt als Nachweis der Einreichung. Bitte speichern Sie sie ab.',
     'form.baseData': 'Basisdaten',
     'form.email': 'E-Mail-Adresse',
     'form.uploaderName': 'Name des Einreichenden (optional)',
@@ -68,7 +68,7 @@ const translations = {
     'form.namePlaceholder': 'Max Mustermann',
     'form.titlePlaceholder': 'Kurztitel unter dem Sie ihr Projekt eingereicht haben',
     'form.back': 'Zurück zur Auswahl',
-    'form.legalConfirmation': 'Dokument: Verpflichtung zur Rechtskonformen Datennutzung ',
+    'form.legalConfirmation': 'Dokument: Verpflichtung zur rechtskonformen Datennutzung ',
     
     // Links
     'link.moodle': 'Schulung(en) via Moodle-Kurs',
