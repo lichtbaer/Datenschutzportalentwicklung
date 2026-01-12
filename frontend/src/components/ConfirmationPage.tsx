@@ -132,9 +132,7 @@ export function ConfirmationPage({
               <p className="text-blue-800 mb-3">
                 {t('confirmation.emailSent', { email })}
               </p>
-              <p className="text-blue-700 text-sm">
-                {t('confirmation.teamNotified')}
-              </p>
+
             </div>
           </div>
         </div>
