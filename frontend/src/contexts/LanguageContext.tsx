@@ -29,7 +29,7 @@ const translations = {
     'projectType.new.desc': 'Reichen Sie Datenschutzunterlagen für ein neues Forschungsprojekt ein',
     'projectType.existing': 'Eingereichtes Projekt bearbeiten',
     'projectType.existing.desc': 'Laden Sie zusätzliche Dokumente für ein bereits eingereichtes Projekt hoch',
-    'projectType.info': 'Hinweis: Für eingereichtes Projekte benötigen Sie Ihre Projekt-ID oder den ursprünglichen Projekttitel zur Identifikation.',
+    'projectType.info': 'Für eingereichte Projekte benötigen Sie Ihre Projekttitel (Kurztitel) zur Identifikation.',
     'projectType.back': 'Zurück zur Institution-Auswahl',
     
     // Existing Project Form
@@ -60,11 +60,11 @@ const translations = {
     'form.email': 'E-Mail-Adresse',
     'form.uploaderName': 'Name des Einreichenden (optional)',
     'form.projectTitle': 'Projekttitel (Kurztitel)',
-    'form.projectTitleHint': 'Dieser Kurztitel wird zur Kommunikation/Zuordnung verwendet, bitte notieren Sie ihn sich und geben Sie ihn bei jeder Kommunikatin mit dem Datenschutz an.',
+    'form.projectTitleHint': 'Dieser Kurztitel wird zur Kommunikation/Zuordnung verwendet, bitte notieren Sie ihn sich und geben Sie ihn bei jeder Kommunikation mit dem Datenschutz an.',
     'form.prospectiveStudy': 'Prospektive Studie / Prospektiver Anteil',
     'form.documents': 'Dokumente hochladen',
     'form.required': '*',
-    'form.emailPlaceholder': 'Ihre dienstliche E-Mail-Adresse, unter der Wir Sie kontaktieren können',
+    'form.emailPlaceholder': 'Ihre dienstliche E-Mail-Adresse, unter der wir Sie kontaktieren können',
     'form.namePlaceholder': 'Max Mustermann',
     'form.titlePlaceholder': 'Kurztitel unter dem Sie ihr Projekt eingereicht haben',
     'form.back': 'Zurück zur Auswahl',
@@ -73,12 +73,12 @@ const translations = {
     // Links
     'link.moodle': 'Schulung(en) via Moodle-Kurs',
     'link.sop': 'SOP (Standard Operating Procedure, Verfahrensanweisung)',
-    'link.research': 'Forschungsportal',
+    'link.research': 'Roxtra-Ordner Forschung',
     'link.email': 'E-Mail Datenschutz-Team',
     
     // Categories
     'category.datenschutzkonzept': 'Datenschutzkonzept',
-    'category.verantwortung': 'Ich bestätige die rechtskonforme Nutzung der Daten',
+    'category.verantwortung': 'Dokument zur Rechtskonformen Datennutzung',
     'category.schulung_uni': 'Nachweis der Schulung GU (Goethe Universität Frankfurt)',
     'category.schulung_ukf': 'Nachweis der Schulung UMF (Universitätsmedizin Frankfurt)',
     'category.einwilligung': 'Einwilligungsformular(e)/PatInfo(s)',
@@ -158,7 +158,7 @@ const translations = {
     'confirmation.note': 'Bitte beachten Sie, dass nur Stichprobenprüfungen vorgesehen sind.',
     'confirmation.newUpload': 'Weiteren Upload durchführen',
     'confirmation.footer': 'Bei Fragen wenden Sie sich bitte an das Datenschutz-Team',
-    'confirmation.institution': 'Goethe Universität Frankfurt(GU) / Universitätsmedizin Frankfurt(UMF)',
+    'confirmation.institution': 'Goethe Universität Frankfurt (GU) / Universitätsmedizin Frankfurt (UMF)',
     
     // Common
     'common.back': 'Zurück',

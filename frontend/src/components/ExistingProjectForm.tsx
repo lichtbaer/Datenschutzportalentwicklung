@@ -128,20 +128,10 @@ export function ExistingProjectForm({
                     <p className="text-red-800 font-bold">
                         {renderWarningWithEmailLink()}
                     </p>
-                    <a href="#" className="text-red-700 underline mt-2 block hover:text-red-900">
-                        {t('existingProject.moreInfo')}
-                    </a>
                 </div>
             </div>
         </div>
 
-        {/* Templates Link */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <a href="#" className="flex items-center gap-2 text-blue-700 hover:text-blue-900 hover:underline">
-              <ExternalLink className="w-4 h-4" />
-              {t('existingProject.templates')}
-            </a>
-        </div>
 
         <form onSubmit={onSubmit}>
           {/* Form Fields */}
