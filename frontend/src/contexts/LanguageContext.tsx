@@ -79,8 +79,8 @@ const translations = {
     // Categories
     'category.datenschutzkonzept': 'Datenschutzkonzept',
     'category.verantwortung': 'Ich bestätige die rechtskonforme Nutzung der Daten',
-    'category.schulung_uni': 'Nachweis der Schulung ist vorgeschrieben',
-    'category.schulung_ukf': 'Nachweis der Schulung ist vorgeschrieben',
+    'category.schulung_uni': 'Nachweis der Schulung GU (Goethe Universität Frankfurt)',
+    'category.schulung_ukf': 'Nachweis der Schulung UMF (Universitätsmedizin Frankfurt)',
     'category.einwilligung': 'Einwilligungsformular(e)/PatInfo(s)',
     'category.ethikvotum': 'Ethikvotum',
     'category.sonstiges': 'Sonstiges',
