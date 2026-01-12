@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 type Language = 'de' | 'en';
 
@@ -49,8 +49,8 @@ const translations = {
     'existingProject.back': 'Zurück zur Auswahl',
     'existingProject.warning': 'Diese Option gilt nur für Forschungsprojekte, die bereits gemäß dem neuen Datenschutzprozess (gültig seit Mai 2025) eingereicht wurden. Sie können hier fehlende Unterlagen und Überarbeitungen hochladen, wenn es z. B. vom Datenschutz-Team Nachfragen bzw. Forderungen gibt oder etwas nachgereicht werden soll. Wenn Sie inhaltliche Anpassungen an bereits genehmigten Projekten (Amendments) vornehmen wollen (vor oder nach dem neuen Datenschutzprozess gestartet), wenden Sie sich bitte per E-Mail an das Datenschutz-Team. Wenn Sie Projekte neu einreichen wollen, die Sie bereits vor dem neuen Datenschutzprozess eingereicht hatten, wählen Sie bitte auf der Startseite "Neues Projekt einreichen".',
     'existingProject.moreInfo': 'Weitere Informationen zur Einreichung finden Sie hier',
-    'existingProject.projectDetails': 'Projektdetails',
-    'existingProject.projectDetailsPlaceholder': 'Bitte beschreiben Sie hier Ihr Anliegen...',
+    'existingProject.projectDetails': 'Projektdetails:',
+    'existingProject.projectDetailsPlaceholder': 'Bitte fassen Sie kurz zusammen, was Sie überarbeitet haben, sodass wir uns schneller ein Bild machen können.',
     'existingProject.templates': 'Hier finden Sie Vorlagen für Nachreichungen',
     
     // Form
@@ -64,11 +64,11 @@ const translations = {
     'form.prospectiveStudy': 'Prospektive Studie / Prospektiver Anteil',
     'form.documents': 'Dokumente hochladen',
     'form.required': '*',
-    'form.emailPlaceholder': 'ihre.email@uni-frankfurt.de',
+    'form.emailPlaceholder': 'Ihre dienstliche E-Mail-Adresse',
     'form.namePlaceholder': 'Max Mustermann',
     'form.titlePlaceholder': 'Kurztitel unter dem Sie ihr Projekt eingereicht haben',
     'form.back': 'Zurück zur Auswahl',
-    'form.legalConfirmation': 'Ich bestätige die rechtskonforme Nutzung der Daten.',
+    'form.legalConfirmation': 'Dokument: Verpflichtung zur Rechtskonformen Datennutzung ',
     
     // Links
     'link.moodle': 'Schulung(en) via Moodle-Kurs',
@@ -149,12 +149,13 @@ const translations = {
     'confirmation.documents': 'Hochgeladene Dokumente',
     'confirmation.emailNotification': 'E-Mail-Benachrichtigung',
     'confirmation.emailSent': 'Eine Bestätigungs-E-Mail wurde an {email} gesendet mit allen Details zu Ihrem Upload.',
-    'confirmation.teamNotified': 'Das Datenschutz-Team wurde ebenfalls über Ihren Upload informiert und wird Ihre Dokumente zeitnah prüfen.',
+    'confirmation.teamNotified': 'Das Datenschutz-Team wurde ebenfalls über Ihren Upload informiert.',
     'confirmation.nextSteps': 'Wie geht es weiter?',
     'confirmation.keepEmailProof': 'Bitte bewahren Sie die Bestätigungs-E-Mail als Nachweis auf',
-    'confirmation.step1': 'Das Datenschutz-Team prüft Ihre hochgeladenen Dokumente',
+    'confirmation.step1': 'Innerhalb der nächsten 14 Tage erfahren Sie, ob Sie in die Unterlagenprüfung gefallen sind.',
     'confirmation.step2': 'Bei Rückfragen werden Sie per E-Mail kontaktiert',
-    'confirmation.step3': 'Nach erfolgreicher Prüfung erhalten Sie eine Freigabe',
+    'confirmation.step3': 'Sollten Sie nach Ablauf der 14 Tage <u>nichts</u> von uns hören, dann können Sie gemäß des Prozesses starten.',
+    'confirmation.note': 'Bitte beachten Sie, dass nach dem aktuellen Prozess nur Stichprobenprüfungen vorgesehen sind.',
     'confirmation.newUpload': 'Weiteren Upload durchführen',
     'confirmation.footer': 'Bei Fragen wenden Sie sich bitte an das Datenschutz-Team',
     'confirmation.institution': 'Goethe Universität Frankfurt(GU) / Universitätsmedizin Frankfurt(UMF)',
@@ -213,8 +214,8 @@ const translations = {
     'existingProject.back': 'Back to Selection',
     'existingProject.warning': 'This is only an option for projects submitted after the new process (started in May). If you submitted your project before that and want to resubmit, please submit it as new. For amendments, please contact the data protection team by email.',
     'existingProject.moreInfo': 'Find more information about submission here',
-    'existingProject.projectDetails': 'Project Details',
-    'existingProject.projectDetailsPlaceholder': 'Please describe your request here...',
+    'existingProject.projectDetails': 'Project details:',
+    'existingProject.projectDetailsPlaceholder': 'Please briefly summarize what you have revised so we can get an overview more quickly.',
     'existingProject.templates': 'Here you can find templates for resubmissions',
     
     // Form
@@ -228,7 +229,7 @@ const translations = {
     'form.prospectiveStudy': 'Prospective Study / Prospective Component',
     'form.documents': 'Upload Documents',
     'form.required': '*',
-    'form.emailPlaceholder': 'your.email@uni-frankfurt.de',
+    'form.emailPlaceholder': 'Your work email',
     'form.namePlaceholder': 'John Doe',
     'form.titlePlaceholder': 'Title of Research Project',
     'form.back': 'Back to Selection',
@@ -313,12 +314,13 @@ const translations = {
     'confirmation.documents': 'Uploaded Documents',
     'confirmation.emailNotification': 'Email Notification',
     'confirmation.emailSent': 'A confirmation email was sent to {email} with all details about your upload.',
-    'confirmation.teamNotified': 'The Data Protection Team has also been informed about your upload and will review your documents promptly.',
+    'confirmation.teamNotified': 'The Data Protection Team has also been informed about your upload.',
     'confirmation.nextSteps': 'What happens next?',
     'confirmation.keepEmailProof': 'Please keep the confirmation email as proof',
-    'confirmation.step1': 'The Data Protection Team reviews your uploaded documents',
+    'confirmation.step1': 'Within the next 14 days, you will be informed whether your documents have been selected for review.',
     'confirmation.step2': 'You will be contacted by email if there are any questions',
-    'confirmation.step3': 'You will receive approval after successful review',
+    'confirmation.step3': 'If you have heard <u>nothing</u> from us after 14 days, you may proceed according to the process.',
+    'confirmation.note': 'Please note that under the current process, only random spot checks are planned.',
     'confirmation.newUpload': 'Perform Another Upload',
     'confirmation.footer': 'If you have questions, please contact the Data Protection Team',
     'confirmation.institution': 'University of Frankfurt / University Hospital',

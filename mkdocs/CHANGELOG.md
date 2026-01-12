@@ -224,5 +224,5 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 ## Support & Contact
 
 **Entwickler-Team**: dev-team@datenschutzportal.uni-frankfurt.de  
-**Datenschutz-Team**: datenschutz@uni-frankfurt.de  
+**Datenschutz-Team**: ForschungFB16@uni-frankfurt.de  
 **Issue Tracker**: https://github.com/uni-frankfurt/datenschutzportal/issues
