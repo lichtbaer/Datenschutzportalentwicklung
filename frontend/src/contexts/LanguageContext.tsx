@@ -11,29 +11,29 @@ interface LanguageContextType {
 const translations = {
   de: {
     // Institution Selection
-    'institution.title': 'Datenschutzportal',
+    'institution.title': 'Datenschutzportal für Forschungsvorhaben',
     'institution.subtitle': 'Willkommen beim Datenschutzportal für Forschungsprojekte',
     'institution.question': 'Zu welcher Institution gehören Sie?',
     'institution.description': 'Bitte wählen Sie die Institution aus, in deren Rahmen Sie Ihre Studie durchführen',
-    'institution.university': 'Universität Frankfurt',
+    'institution.university': 'Goethe Universität Frankfurt(GU)',
     'institution.university.desc': 'Für Forschungsprojekte der Goethe-Universität Frankfurt am Main',
-    'institution.clinic': 'Universitätsklinikum Frankfurt',
-    'institution.clinic.desc': 'Für klinische Forschungsprojekte des Universitätsklinikums',
+    'institution.clinic': 'Universitätsmedizin Frankfurt(UMF)',
+    'institution.clinic.desc': 'Für klinische Forschungsprojekte des Universitätsmedizin Frankfurt',
     'institution.footer': 'Bei Fragen zur richtigen Auswahl wenden Sie sich bitte an das Datenschutz-Team',
     
     // Project Type Selection
-    'projectType.title': 'Datenschutzportal',
+    'projectType.title': 'Datenschutzportal für Forschungsvorhaben',
     'projectType.question': 'Was möchten Sie tun?',
-    'projectType.description': 'Wählen Sie aus, ob Sie ein neues Projekt einreichen oder ein bestehendes Projekt bearbeiten möchten',
+    'projectType.description': 'Wählen Sie aus, ob Sie ein neues Projekt einreichen oder ein eingereichtes Projekt bearbeiten möchten',
     'projectType.new': 'Neues Projekt einreichen',
     'projectType.new.desc': 'Reichen Sie Datenschutzunterlagen für ein neues Forschungsprojekt ein',
-    'projectType.existing': 'Bestehendes Projekt bearbeiten',
-    'projectType.existing.desc': 'Laden Sie zusätzliche Dokumente für ein bereits bestehendes Projekt hoch',
-    'projectType.info': 'Hinweis: Für bestehende Projekte benötigen Sie Ihre Projekt-ID oder den ursprünglichen Projekttitel zur Identifikation.',
+    'projectType.existing': 'Eingereichtes Projekt bearbeiten',
+    'projectType.existing.desc': 'Laden Sie zusätzliche Dokumente für ein bereits eingereichtes Projekt hoch',
+    'projectType.info': 'Hinweis: Für eingereichtes Projekte benötigen Sie Ihre Projekt-ID oder den ursprünglichen Projekttitel zur Identifikation.',
     'projectType.back': 'Zurück zur Institution-Auswahl',
     
     // Existing Project Form
-    'existingProject.title': 'Bestehendes Projekt bearbeiten',
+    'existingProject.title': 'Eingereichtes Projekt bearbeiten',
     'existingProject.search': 'Projekt suchen',
     'existingProject.label': 'Projekt-ID oder Projekttitel',
     'existingProject.placeholder': 'z.B. PRJ-2024-001 oder "Studie zur..."',
@@ -47,40 +47,40 @@ const translations = {
     'existingProject.notFound': 'Projekt nicht gefunden. Bitte überprüfen Sie Ihre Eingabe.',
     'existingProject.error': 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.',
     'existingProject.back': 'Zurück zur Auswahl',
-    'existingProject.warning': 'Dies ist nur eine Option für Projekte, die nach dem neuen Prozess (gestartet im Mai) eingereicht wurden. Wenn Sie Ihr Projekt davor eingereicht haben und es neu einreichen wollen, reichen Sie es bitte neu ein. Für Amendments wenden Sie sich bitte per Mail an das Datenschutz-Team.',
+    'existingProject.warning': 'Diese Option gilt nur für Forschungsprojekte, die bereits gemäß dem neuen Datenschutzprozess (gültig seit Mai 2025) eingereicht wurden. Sie können hier fehlende Unterlagen und Überarbeitungen hochladen, wenn es z. B. vom Datenschutz-Team Nachfragen bzw. Forderungen gibt oder etwas nachgereicht werden soll. Wenn Sie inhaltliche Anpassungen an bereits genehmigten Projekten (Amendments) vornehmen wollen (vor oder nach dem neuen Datenschutzprozess gestartet), wenden Sie sich bitte per E-Mail an das Datenschutz-Team. Wenn Sie Projekte neu einreichen wollen, die Sie bereits vor dem neuen Datenschutzprozess eingereicht hatten, wählen Sie bitte auf der Startseite "Neues Projekt einreichen".',
     'existingProject.moreInfo': 'Weitere Informationen zur Einreichung finden Sie hier',
     'existingProject.projectDetails': 'Projektdetails',
     'existingProject.projectDetailsPlaceholder': 'Bitte beschreiben Sie hier Ihr Anliegen...',
     'existingProject.templates': 'Hier finden Sie Vorlagen für Nachreichungen',
     
     // Form
-    'form.title': 'Datenschutzportal',
-    'form.info': 'Bitte laden Sie alle erforderlichen datenschutzrelevanten Dokumente für Ihr Forschungsprojekt hoch. Die Dokumente werden sicher in der Nextcloud gespeichert. Sie erhalten eine Bestätigungsmail nach erfolgreichem Upload.',
+    'form.title': 'Datenschutzportal für Forschungsvorhaben',
+    'form.info': 'Bitte laden Sie alle erforderlichen Dokumente für Ihr Forschungsprojekt hoch. Die Dokumente werden sicher in der next.Hessencloud gespeichert. Sie erhalten eine Bestätigungs-E-Mail nach erfolgreichem Upload.',
     'form.baseData': 'Basisdaten',
     'form.email': 'E-Mail-Adresse',
     'form.uploaderName': 'Name des Einreichenden (optional)',
     'form.projectTitle': 'Projekttitel (Kurztitel)',
-    'form.projectTitleHint': 'Unter diesem Titel wird Ihr Projekt kommuniziert.',
+    'form.projectTitleHint': 'Dieser Kurztitel wird zur Kommunikation/Zuordnung verwendet, bitte notieren Sie ihn sich und geben Sie ihn bei jeder Kommunikatin mit dem Datenschutz an.',
     'form.prospectiveStudy': 'Prospektive Studie / Prospektiver Anteil',
     'form.documents': 'Dokumente hochladen',
     'form.required': '*',
     'form.emailPlaceholder': 'ihre.email@uni-frankfurt.de',
     'form.namePlaceholder': 'Max Mustermann',
-    'form.titlePlaceholder': 'Titel des Forschungsprojekts',
+    'form.titlePlaceholder': 'Kurztitel unter dem Sie ihr Projekt eingereicht haben',
     'form.back': 'Zurück zur Auswahl',
     'form.legalConfirmation': 'Ich bestätige die rechtskonforme Nutzung der Daten.',
     
     // Links
-    'link.moodle': 'Moodle-Kurs',
-    'link.sop': 'SOP (Standard Operating Procedures)',
+    'link.moodle': 'Schulung(en) via Moodle-Kurs',
+    'link.sop': 'SOP (Standard Operating Procedure, Verfahrensanweisung)',
     'link.research': 'Forschungsportal',
     'link.email': 'E-Mail Datenschutz-Team',
     
     // Categories
     'category.datenschutzkonzept': 'Datenschutzkonzept',
     'category.verantwortung': 'Ich bestätige die rechtskonforme Nutzung der Daten',
-    'category.schulung_uni': 'Schulung Uni Nachweis',
-    'category.schulung_ukf': 'Schulung UKF Nachweis',
+    'category.schulung_uni': 'Nachweis der Schulung ist vorgeschrieben',
+    'category.schulung_ukf': 'Nachweis der Schulung ist vorgeschrieben',
     'category.einwilligung': 'Einwilligungsformular(e)/PatInfo(s)',
     'category.ethikvotum': 'Ethikvotum',
     'category.sonstiges': 'Sonstiges',
@@ -88,7 +88,7 @@ const translations = {
     'category.sonstiges.desc': 'Darstellungen/Dokumente zum Datenfluss (wenn vorhanden), oder bei Verwendung von Fragebögen die Fragen. Wenn Sie den Datenfluss nicht im DSK beschrieben haben, laden Sie das Dokument hier hoch.',
     
     // File Upload
-    'upload.dropzone': 'Klicken Sie hier oder ziehen Sie Dateien hierher',
+    'upload.dropzone': 'Klicken Sie hier oder ziehen Sie Dateien hier hin',
     'upload.formats': 'PDF, DOC, DOCX, ODT, ODS, ODP, ZIP, PNG, JPG',
     'upload.preview': 'Vorschau',
     'upload.close': 'Schließen',
@@ -103,7 +103,7 @@ const translations = {
     'upload.phase.validating': 'Validierung',
     'upload.phase.validating.desc': 'Dateien werden auf Gültigkeit geprüft...',
     'upload.phase.connecting': 'Verbindung wird hergestellt',
-    'upload.phase.connecting.desc': 'Verbindung zur Nextcloud wird hergestellt...',
+    'upload.phase.connecting.desc': 'Verbindung zur next.Hessencloud wird hergestellt...',
     'upload.phase.uploading': 'Dateien werden hochgeladen',
     'upload.phase.uploading.desc': '{count} Datei(en) werden hochgeladen...',
     'upload.phase.processing': 'Verarbeitung',
@@ -140,7 +140,7 @@ const translations = {
     
     // Confirmation
     'confirmation.success': 'Upload erfolgreich abgeschlossen!',
-    'confirmation.message': 'Ihre Dokumente wurden erfolgreich hochgeladen und in der Nextcloud gespeichert. Eine Bestätigungs-E-Mail wurde an Ihre E-Mail-Adresse versendet.',
+    'confirmation.message': 'Ihre Dokumente wurden erfolgreich hochgeladen und in der next.Hessencloud gespeichert. Eine Bestätigungs-E-Mail wurde an Ihre E-Mail-Adresse versendet.',
     'confirmation.details': 'Upload-Details',
     'confirmation.projectTitle': 'Projekttitel',
     'confirmation.uploader': 'Uploader',
@@ -157,7 +157,7 @@ const translations = {
     'confirmation.step3': 'Nach erfolgreicher Prüfung erhalten Sie eine Freigabe',
     'confirmation.newUpload': 'Weiteren Upload durchführen',
     'confirmation.footer': 'Bei Fragen wenden Sie sich bitte an das Datenschutz-Team',
-    'confirmation.institution': 'Universität Frankfurt / Universitätsklinik',
+    'confirmation.institution': 'Goethe Universität Frankfurt(GU) / Universitätsmedizin Frankfurt(UMF)',
     
     // Common
     'common.back': 'Zurück',
@@ -219,7 +219,7 @@ const translations = {
     
     // Form
     'form.title': 'Data Protection Portal',
-    'form.info': 'Please upload all required data protection documents for your research project. The documents will be securely stored in Nextcloud. You will receive a confirmation email after successful upload.',
+    'form.info': 'Please upload all required data protection documents for your research project. The documents will be securely stored in next.Hessencloud. You will receive a confirmation email after successful upload.',
     'form.baseData': 'Basic Data',
     'form.email': 'Email Address',
     'form.uploaderName': 'Uploader Name (optional)',
@@ -236,7 +236,7 @@ const translations = {
     
     // Links
     'link.moodle': 'Moodle Course',
-    'link.sop': 'SOP (Standard Operating Procedures)',
+    'link.sop': 'SOP (Standard Operating Procedure)',
     'link.research': 'Research Portal',
     'link.email': 'Data Protection Team Email',
     
@@ -267,7 +267,7 @@ const translations = {
     'upload.phase.validating': 'Validating',
     'upload.phase.validating.desc': 'Files are being validated...',
     'upload.phase.connecting': 'Connecting',
-    'upload.phase.connecting.desc': 'Connecting to Nextcloud...',
+    'upload.phase.connecting.desc': 'Connecting to next.Hessencloud...',
     'upload.phase.uploading': 'Uploading files',
     'upload.phase.uploading.desc': 'Uploading {count} file(s)...',
     'upload.phase.processing': 'Processing',
@@ -304,7 +304,7 @@ const translations = {
     
     // Confirmation
     'confirmation.success': 'Upload Completed Successfully!',
-    'confirmation.message': 'Your documents have been successfully uploaded and stored in Nextcloud. A confirmation email has been sent to your email address.',
+    'confirmation.message': 'Your documents have been successfully uploaded and stored in next.Hessencloud. A confirmation email has been sent to your email address.',
     'confirmation.details': 'Upload Details',
     'confirmation.projectTitle': 'Project Title',
     'confirmation.uploader': 'Uploader',

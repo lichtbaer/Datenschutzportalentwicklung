@@ -5,7 +5,7 @@
 {% block content %}
 <h2>Upload erfolgreich</h2>
 <p>Sehr geehrte(r) {{ uploader_name or 'Nutzer' }},</p>
-<p>Vielen Dank für Ihre Einreichung. Ihr Projekt wurde erfolgreich in unserem System erfasst und die Dokumente sicher in der Nextcloud gespeichert.</p>
+<p>Vielen Dank für Ihre Einreichung. Ihr Projekt wurde erfolgreich in unserem System erfasst und die Dokumente sicher in der next.Hessenbox gespeichert.</p>
 
 <div class="info-box">
     <table class="metadata-table">
@@ -29,16 +29,16 @@
     {% for file in files %}
     <li>
         <strong>{{ file.filename }}</strong><br>
-        <span style="font-size: 13px; color: #6b7280;">Kategorie: {{ file.category }}</span>
+        <span style="font-size: 13px; color: #6b7280;">Art: {{ file.category }}</span>
     </li>
     {% endfor %}
 </ul>
 
-<h3>Weitere Hinweise</h3>
-<p>Das Datenschutz-Team wird Ihre Unterlagen zeitnah prüfen. Sollten Rückfragen bestehen oder weitere Unterlagen benötigt werden, melden wir uns bei Ihnen.</p>
+<h3>Hinweise</h3>
+<p>Bei Rückfragen werden Sie per E-Mail kontaktiert. Wenn Sie innerhalb einer 14-Tages-Frist keine Rückmeldung von uns bekommen, gilt Ihr Projekt als automatisch freigegeben und Sie können starten. (Dies gilt nicht für Ausnahmen vom Standard gemäß SOP). Bitte beachten Sie, dass nur Stichprobenprüfungen vorgesehen sind.</p>
 
 <p>
     <strong>Wichtig:</strong> Bitte bewahren Sie diese E-Mail als Nachweis für Ihre Einreichung auf. 
-    Bei Rückfragen geben Sie bitte immer Ihre Projekt-ID ({{ project_id }}) an.
+    Bei Rückfragen geben Sie bitte immer Ihren Projekt-Titel ({{ project_title }}) und Upload Datum an.
 </p>
 {% endblock %}

@@ -211,7 +211,7 @@ class EmailService:
             <ul>
                 {files_html}
             </ul>
-            <p><a href="{folder_url}">Open folder in Nextcloud</a></p>
+            <p><a href="{folder_url}">Open folder in next.Hessenbox</a></p>
         </body>
         </html>
         """
