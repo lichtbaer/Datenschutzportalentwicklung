@@ -30,11 +30,16 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000/api}
+        VITE_API_TOKEN: ${VITE_API_TOKEN:-test-api-token-for-local-development}
     container_name: datenschutzportal-frontend
     ports:
       - "3000:80"
     environment:
-      - VITE_API_URL=http://localhost:8000/api
+      # NOTE: Vite production build reads VITE_* at build-time (args above).
+      # Keeping runtime env here doesn't hurt, but won't change the built JS.
+      - VITE_API_URL=${VITE_API_URL:-http://localhost:8000/api}
       - VITE_API_TOKEN=${VITE_API_TOKEN:-test-api-token-for-local-development}
     depends_on:
       backend:

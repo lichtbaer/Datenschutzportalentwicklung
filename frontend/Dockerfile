@@ -3,6 +3,10 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Vite env vars must be available at build time
+ARG VITE_API_URL
+ARG VITE_API_TOKEN
+
 # Copy package files
 COPY package*.json ./
 
@@ -11,6 +15,10 @@ RUN npm ci
 
 # Copy source code
 COPY . .
+
+# Expose build-time variables to the Vite build
+ENV VITE_API_URL=${VITE_API_URL}
+ENV VITE_API_TOKEN=${VITE_API_TOKEN}
 
 # Build the application
 RUN npm run build
