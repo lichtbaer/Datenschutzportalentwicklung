@@ -2,19 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.routes import upload, projects, health
-import logging
-import sys
+from app.logging_config import configure_logging
+from app.middleware.request_context import RequestContextMiddleware
+import structlog
 
-# Configure logging
-logging.basicConfig(
-    level=logging.DEBUG if settings.api_debug else logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler(sys.stdout)
-    ]
-)
-
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 app = FastAPI(
     title="Datenschutzportal API",
@@ -22,7 +14,19 @@ app = FastAPI(
     version="1.0.0"
 )
 
-logger.info("Starting Datenschutzportal API")
+@app.on_event("startup")
+async def _startup() -> None:
+    # Uvicorn configures logging after importing the app. We (re-)apply our structlog
+    # configuration on startup to ensure uvicorn.* and app logs are JSON.
+    configure_logging(
+        service_name=settings.service_name,
+        env=settings.env,
+        log_level="DEBUG" if settings.api_debug else settings.log_level,
+    )
+    logger.info("api_start")
+
+# Request context / correlation
+app.add_middleware(RequestContextMiddleware)
 
 # CORS Middleware
 app.add_middleware(

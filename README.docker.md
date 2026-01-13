@@ -47,6 +47,10 @@ docker-compose -f docker-compose.dev.yml down
 Create `backend/.env` with required configuration:
 
 ```env
+LOG_LEVEL=INFO
+ENV=prod
+SERVICE_NAME=datenschutzportal-backend
+LOG_REDACTION_SECRET=change-me
 NEXTCLOUD_URL=http://localhost:8080
 NEXTCLOUD_USERNAME=your_username
 NEXTCLOUD_PASSWORD=your_password

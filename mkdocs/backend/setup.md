@@ -85,6 +85,8 @@ uvicorn[standard]==0.27.0
 python-multipart==0.0.6
 pydantic>=2.9.0
 pydantic-settings>=2.5.0
+structlog==25.5.0
+orjson==3.11.5
 webdavclient3==3.14.6
 jinja2==3.1.2
 aiosmtplib==3.0.1
@@ -104,6 +106,13 @@ email-validator==2.1.0
 ### .env Datei
 
 ```env
+# Logging (strukturierte JSON Logs auf stdout)
+LOG_LEVEL=INFO
+ENV=prod
+SERVICE_NAME=datenschutzportal-backend
+# Secret für HMAC-basierte Hashes (z.B. email_hash) und Redaction; in Prod zwingend ändern
+LOG_REDACTION_SECRET=change-me
+
 # API Configuration
 API_HOST=0.0.0.0
 API_PORT=8000

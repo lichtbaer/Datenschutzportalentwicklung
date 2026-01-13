@@ -6,10 +6,10 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from app.config import settings
 from typing import List, Dict, Any, Literal, Sequence
 from datetime import datetime
-import logging
+import structlog
 from urllib.parse import quote, urlsplit
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 ProjectType = Literal["new", "existing"]
 
@@ -67,7 +67,7 @@ class EmailService:
             
             return True
         except Exception as e:
-            print(f"Error sending email: {e}")
+            logger.error("email_send_failed", exc_info=True)
             # raise
             return False
 
@@ -82,7 +82,7 @@ class EmailService:
         Send an email using a Jinja2 template
         """
         if not self.template_env:
-            print("Template environment not initialized")
+            logger.error("email_template_env_not_initialized")
             return False
             
         try:
@@ -90,7 +90,7 @@ class EmailService:
             html_content = template.render(**context)
             return await self.send_email(to_email, subject, html_content)
         except Exception as e:
-            print(f"Error rendering template {template_name}: {e}")
+            logger.error("email_template_render_failed", template_name=template_name, exc_info=True)
             return False
     
     async def send_confirmation_email(

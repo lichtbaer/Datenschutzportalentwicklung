@@ -11,6 +11,15 @@ Die API ist durch Bearer Tokens geschützt. Der Token muss im Header jeder Anfra
 
 Der Token wird in der `.env` Datei (`API_TOKEN`) konfiguriert.
 
+## Request Correlation (X-Request-ID)
+
+Für strukturiertes Logging und bessere Nachverfolgbarkeit unterstützt die API einen Correlation Header:
+
+- **Request**: `X-Request-ID: <uuid>`
+- **Response**: Die API spiegelt `X-Request-ID` zurück (oder generiert eine neue, wenn keine mitgesendet wurde).
+
+Diese ID erscheint in Backend-Logs als `request_id`.
+
 ## Endpunkte
 
 ### Upload

@@ -5,6 +5,13 @@ class Settings(BaseSettings):
     # Allow unrelated env vars (e.g. TZ/LOG_LEVEL/VITE_*) without crashing
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
+    # Logging
+    log_level: str = "INFO"
+    env: str = "dev"
+    service_name: str = "datenschutzportal-backend"
+    # Used for HMAC hashing of PII (e.g. email_hash). Must be set in production.
+    log_redaction_secret: str = "change-me"
+
     # API
     api_host: str = "0.0.0.0"
     api_port: int = 8000

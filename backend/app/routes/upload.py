@@ -9,9 +9,11 @@ from datetime import datetime
 import os
 import json
 import re
-import logging
+import structlog
 
-logger = logging.getLogger(__name__)
+from app.logging_config import hmac_sha256_hex
+
+logger = structlog.get_logger(__name__)
 
 router = APIRouter()
 nextcloud = NextcloudService()
@@ -32,8 +34,14 @@ async def upload_documents(
     """
     Upload data protection documents to Nextcloud
     """
-    logger.info(f"Upload request received - Email: {email}, Project: {project_title}, Files: {len(files)}")
-    logger.debug(f"Upload details - Institution: {institution}, Project type: {project_type}, Prospective: {is_prospective_study}")
+    email_hash = hmac_sha256_hex(email, settings.log_redaction_secret)
+    logger.info(
+        "upload_received",
+        email_hash=email_hash,
+        files_count=len(files),
+        project_type=project_type,
+        is_prospective_study=is_prospective_study,
+    )
     
     try:
         # Sanitize project title for folder name
@@ -55,24 +63,23 @@ async def upload_documents(
             
         # Use folder_name as project_id for consistency with storage
         project_id = folder_name
-        logger.debug(f"Generated project_id: {project_id}")
+        logger.debug("project_id_generated", project_id=project_id)
         
         # Parse categories if provided
         categories_map = {}
         if file_categories:
             try:
                 categories_map = json.loads(file_categories)
-                logger.debug(f"Parsed file categories: {len(categories_map)} mappings")
+                logger.debug("file_categories_parsed", mappings_count=len(categories_map))
             except Exception as e:
-                logger.warning(f"Failed to parse file_categories JSON: {e}")
+                logger.warning("file_categories_parse_failed", exc_info=True)
                 pass
         
         # Validate files
-        logger.debug("Validating files...")
+        logger.debug("files_validating", files_count=len(files))
         for file in files:
-            logger.debug(f"Validating file: {file.filename}, size: {file.size} bytes, content_type: {file.content_type}")
             if file.size > settings.max_file_size:
-                logger.error(f"File {file.filename} exceeds maximum size: {file.size} > {settings.max_file_size}")
+                logger.warning("file_too_large", file_size=file.size, max_size=settings.max_file_size)
                 raise HTTPException(
                     status_code=413,
                     detail=f"File {file.filename} exceeds maximum size of 50 MB"
@@ -80,29 +87,29 @@ async def upload_documents(
             
             file_ext = os.path.splitext(file.filename)[1].lower()
             if file_ext not in settings.allowed_file_types:
-                logger.error(f"File {file.filename} has disallowed extension: {file_ext}")
+                logger.warning("file_extension_disallowed", file_extension=file_ext)
                 raise HTTPException(
                     status_code=400,
                     detail=f"File type {file_ext} not allowed"
                 )
         
-        logger.info("File validation passed")
+        logger.info("files_validation_passed")
         
         # Create project folder structure
         project_path = f"{settings.nextcloud_base_path}/{project_id}"
-        logger.info(f"Creating project folder: {project_path}")
+        logger.info("nextcloud_project_folder_creating", project_id=project_id)
         
         # Test connection before attempting folder creation
         connection_ok, connection_msg = nextcloud.test_connection()
         if not connection_ok:
-            logger.error(f"Nextcloud connection failed: {connection_msg}")
+            logger.error("nextcloud_connection_failed", project_id=project_id)
             raise HTTPException(
                 status_code=503,
                 detail=f"Nextcloud connection failed. Please check Nextcloud configuration and credentials. Error: {connection_msg}"
             )
         
         if not nextcloud.create_folder(project_path):
-            logger.error(f"Failed to create project folder: {project_path}")
+            logger.error("nextcloud_project_folder_create_failed", project_id=project_id)
             raise HTTPException(
                 status_code=500,
                 detail=f"Failed to create project folder in Nextcloud at path: {project_path}. Please check Nextcloud permissions and ensure the base path exists."
@@ -110,28 +117,27 @@ async def upload_documents(
         
         # Upload files directly to project folder (no subfolders)
         uploaded_files = []
-        logger.info(f"Starting upload of {len(files)} files...")
+        logger.info("files_upload_started", project_id=project_id, files_count=len(files))
         for idx, file in enumerate(files, 1):
             category = categories_map.get(file.filename, "sonstiges")
-            logger.debug(f"Uploading file {idx}/{len(files)}: {file.filename} to category: {category}")
+            logger.debug("file_uploading", project_id=project_id, index=idx, total=len(files), category=category)
             
             # Upload directly to project folder, no category subfolders
             file_path = f"{project_path}/{file.filename}"
             if not await nextcloud.upload_file(file, file_path):
-                logger.error(f"Failed to upload file: {file.filename} to {file_path}")
+                logger.error("file_upload_failed", project_id=project_id, category=category)
                 raise HTTPException(status_code=500, detail=f"Failed to upload file: {file.filename}")
             
-            logger.debug(f"Successfully uploaded file: {file.filename}")
             uploaded_files.append({
                 "filename": file.filename,
                 "category": category,
                 "path": file_path
             })
         
-        logger.info(f"Successfully uploaded {len(uploaded_files)} files")
+        logger.info("files_upload_completed", project_id=project_id, uploaded_count=len(uploaded_files))
         
         # Create metadata file
-        logger.debug("Creating metadata file...")
+        logger.debug("metadata_creating", project_id=project_id)
         metadata = {
             "project_id": project_id,
             "email": email,
@@ -147,11 +153,11 @@ async def upload_documents(
         
         metadata_path = f"{project_path}/metadata.json"
         if not await nextcloud.upload_metadata(metadata, metadata_path):
-            logger.error(f"Failed to upload metadata to {metadata_path}")
+            logger.error("metadata_upload_failed", project_id=project_id)
             raise HTTPException(status_code=500, detail="Failed to upload metadata")
 
         # Create README.md
-        logger.debug("Creating README.md...")
+        logger.debug("readme_creating", project_id=project_id)
         readme_content = f"""# {project_title}
 
 **Projekt-ID:** {project_id}
@@ -174,11 +180,11 @@ async def upload_documents(
 
         readme_path = f"{project_path}/README.md"
         if not await nextcloud.upload_content(readme_content, readme_path):
-            logger.error(f"Failed to upload README.md to {readme_path}")
+            logger.error("readme_upload_failed", project_id=project_id)
             raise HTTPException(status_code=500, detail="Failed to upload README.md")
         
         # Send confirmation email to user
-        logger.info(f"Sending confirmation email to {email}...")
+        logger.info("confirmation_email_sending", project_id=project_id, email_hash=email_hash)
         try:
             await email_service.send_confirmation_email(
                 to_email=email,
@@ -188,13 +194,13 @@ async def upload_documents(
                 files=uploaded_files,
                 project_type=project_type
             )
-            logger.info("Confirmation email sent successfully")
+            logger.info("confirmation_email_sent", project_id=project_id, email_hash=email_hash)
         except Exception as e:
-            logger.error(f"Failed to send confirmation email: {e}", exc_info=True)
+            logger.error("confirmation_email_send_failed", project_id=project_id, exc_info=True)
             # Don't fail the upload if email fails
         
         # Send notification to team
-        logger.info("Sending team notification...")
+        logger.info("team_notification_sending", project_id=project_id)
         try:
             await email_service.send_team_notification(
                 project_id=project_id,
@@ -202,12 +208,12 @@ async def upload_documents(
                 uploader_email=email,
                 file_names=[f["filename"] for f in uploaded_files],
             )
-            logger.info("Team notification sent successfully")
+            logger.info("team_notification_sent", project_id=project_id)
         except Exception as e:
-            logger.error(f"Failed to send team notification: {e}", exc_info=True)
+            logger.error("team_notification_send_failed", project_id=project_id, exc_info=True)
             # Don't fail the upload if email fails
         
-        logger.info(f"Upload completed successfully for project: {project_id}")
+        logger.info("upload_completed", project_id=project_id, files_uploaded=len(files))
         return UploadResponse(
             success=True,
             project_id=project_id,
@@ -220,7 +226,7 @@ async def upload_documents(
         # Re-raise HTTP exceptions as-is
         raise
     except Exception as e:
-        logger.error(f"Unexpected error during upload: {e}", exc_info=True)
+        logger.error("upload_unexpected_error", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 @router.get("/upload/status/{project_id}", dependencies=[Depends(verify_token)])

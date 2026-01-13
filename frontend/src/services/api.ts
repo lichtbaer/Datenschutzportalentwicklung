@@ -1,4 +1,5 @@
 import { FileCategory } from '../types';
+import { generateRequestId, log } from '../utils/logger';
 
 export interface UploadData {
   email: string;
@@ -34,22 +35,22 @@ export class ApiError extends Error {
 
 export const api = {
   upload: async (data: UploadData): Promise<UploadResult> => {
-    console.log('[API] Starting upload request', {
-      email: data.email,
-      projectTitle: data.projectTitle,
-      institution: data.institution,
+    const requestId = generateRequestId();
+    log.info('api_upload_start', {
+      requestId,
       projectType: data.projectType,
-      totalFiles: data.categories.reduce((sum, cat) => sum + cat.files.length, 0)
+      categoriesCount: data.categories.length,
+      totalFiles: data.categories.reduce((sum, cat) => sum + cat.files.length, 0),
     });
 
     // Basic validation before even trying
     if (!API_TOKEN) {
-      console.error('[API] API_TOKEN is missing in environment variables');
+      log.error('api_config_missing_token');
       throw new ApiError('error.configMissingToken');
     }
 
     if (!API_BASE_URL) {
-      console.error('[API] API_BASE_URL is missing in environment variables');
+      log.error('api_config_missing_base_url');
       throw new ApiError('error.configMissingApiUrl');
     }
 
@@ -106,23 +107,25 @@ export const api = {
         if (prefix) {
           const newName = prefix + file.name;
           fileToUpload = new File([file], newName, { type: file.type });
-          console.log(`[API] Renamed file: ${file.name} -> ${newName}`);
+          log.debug('api_file_renamed');
         }
 
         formData.append('files', fileToUpload);
         categoryMap[fileToUpload.name] = category.key;
         totalFileSize += fileToUpload.size;
-        console.log(`[API] Added file to FormData: ${fileToUpload.name} (${fileToUpload.size} bytes, category: ${category.key})`);
+        log.debug('api_file_added_to_formdata', { fileSize: fileToUpload.size, category: category.key });
       });
     });
 
     // Add category mapping
     formData.append('file_categories', JSON.stringify(categoryMap));
-    console.log('[API] File categories mapping:', categoryMap);
-    console.log(`[API] Total upload size: ${(totalFileSize / 1024 / 1024).toFixed(2)} MB`);
+    log.debug('api_upload_payload_prepared', {
+      requestId,
+      totalUploadSizeMb: Number((totalFileSize / 1024 / 1024).toFixed(2)),
+    });
 
     const uploadUrl = `${API_BASE_URL}/upload`;
-    console.log(`[API] Sending request to: ${uploadUrl}`);
+    log.debug('api_request_sending', { requestId });
 
     try {
       const startTime = Date.now();
@@ -130,34 +133,37 @@ export const api = {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${API_TOKEN}`,
+          'X-Request-ID': requestId,
         },
         body: formData,
       });
 
       const duration = Date.now() - startTime;
-      console.log(`[API] Response received after ${duration}ms`, {
+      log.info('api_response_received', {
+        requestId,
+        durationMs: duration,
         status: response.status,
         statusText: response.statusText,
-        headers: Object.fromEntries(response.headers.entries())
       });
 
       if (!response.ok) {
         if (response.status === 401 || response.status === 403) {
-          console.error('[API] Authentication failed', {
+          log.error('api_auth_failed', {
+            requestId,
             status: response.status,
             statusText: response.statusText
           });
           throw new ApiError('error.authFailed');
         } else {
           try {
-            const errorData = await response.json();
-            console.error('[API] Upload failed with error response:', errorData);
+            await response.json();
+            log.error('api_upload_failed_with_json_error', { requestId, status: response.status });
           } catch (parseError) {
-            const text = await response.text().catch(() => 'Unable to read error response');
-            console.error('[API] Upload failed, unable to parse error response:', {
+            await response.text().catch(() => 'Unable to read error response');
+            log.error('api_upload_failed_unparseable_error', {
+              requestId,
               status: response.status,
               statusText: response.statusText,
-              responseText: text.substring(0, 500) // Limit log size
             });
           }
           throw new ApiError('error.uploadFailed');
@@ -165,7 +171,7 @@ export const api = {
       }
 
       const result = await response.json();
-      console.log('[API] Upload successful:', result);
+      log.info('api_upload_success', { requestId });
       
       return {
         success: result.success,
@@ -176,13 +182,14 @@ export const api = {
       };
     } catch (error) {
       if (error instanceof Error) {
-        console.error('[API] Upload error:', {
+        log.error('api_upload_error', {
+          requestId,
           message: error.message,
           name: error.name,
           stack: error.stack
         });
       } else {
-        console.error('[API] Upload error (unknown type):', error);
+        log.error('api_upload_error_unknown', { requestId });
       }
       // Re-throw with user-friendly message if possible, or pass through
       throw error;

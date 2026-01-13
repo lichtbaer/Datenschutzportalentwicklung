@@ -5,9 +5,10 @@ from typing import Dict, Any, Tuple
 from fastapi import UploadFile
 import tempfile
 import os
-import logging
+import structlog
+from app.logging_config import hmac_sha256_hex
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 class NextcloudService:
     def __init__(self):
@@ -26,11 +27,11 @@ class NextcloudService:
         try:
             # Try to list the root directory to verify connection
             self.client.list('/')
-            logger.info("Nextcloud connection test successful")
+            logger.info("nextcloud_connection_test_successful")
             return True, "Connection successful"
         except Exception as e:
             error_msg = f"Failed to connect to Nextcloud: {e}"
-            logger.error(error_msg, exc_info=True)
+            logger.error("nextcloud_connection_test_failed", exc_info=True)
             return False, error_msg
     
     def create_folder(self, path: str) -> bool:
@@ -41,7 +42,7 @@ class NextcloudService:
             # Normalize path: remove leading/trailing slashes and split
             normalized_path = path.strip('/')
             if not normalized_path:
-                logger.error("Empty path provided for folder creation")
+                logger.error("nextcloud_create_folder_empty_path")
                 return False
             
             path_parts = normalized_path.split('/')
@@ -62,19 +63,32 @@ class NextcloudService:
                 
                 try:
                     if not self.client.check(full_path):
-                        logger.debug(f"Creating folder: {full_path}")
+                        logger.debug(
+                            "nextcloud_folder_creating",
+                            folder_path_hash=hmac_sha256_hex(full_path, settings.log_redaction_secret)[:16],
+                        )
                         self.client.mkdir(full_path)
-                        logger.debug(f"Successfully created folder: {full_path}")
+                        logger.debug(
+                            "nextcloud_folder_created",
+                            folder_path_hash=hmac_sha256_hex(full_path, settings.log_redaction_secret)[:16],
+                        )
                     else:
-                        logger.debug(f"Folder already exists: {full_path}")
+                        logger.debug(
+                            "nextcloud_folder_exists",
+                            folder_path_hash=hmac_sha256_hex(full_path, settings.log_redaction_secret)[:16],
+                        )
                 except Exception as e:
-                    logger.error(f"Error creating intermediate folder {full_path}: {e}", exc_info=True)
+                    logger.error(
+                        "nextcloud_folder_create_failed",
+                        folder_path_hash=hmac_sha256_hex(full_path, settings.log_redaction_secret)[:16],
+                        exc_info=True,
+                    )
                     raise
             
-            logger.info(f"Successfully ensured folder structure exists: {path}")
+            logger.info("nextcloud_folder_structure_ensured")
             return True
         except Exception as e:
-            logger.error(f"Error creating folder {path}: {e}", exc_info=True)
+            logger.error("nextcloud_create_folder_failed", exc_info=True)
             return False 
     
     async def upload_file(self, file: UploadFile, remote_path: str) -> bool:
@@ -83,17 +97,24 @@ class NextcloudService:
         """
         tmp_path = None
         try:
-            logger.debug(f"Uploading file {file.filename} ({file.size} bytes) to {remote_path}")
+            logger.debug(
+                "nextcloud_upload_started",
+                remote_path_hash=hmac_sha256_hex(remote_path, settings.log_redaction_secret)[:16],
+                file_size=file.size,
+            )
             # Save to temporary file
             with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
                 content = await file.read()
                 tmp_file.write(content)
                 tmp_path = tmp_file.name
-                logger.debug(f"Saved file to temporary location: {tmp_path}")
             
             # Upload to Nextcloud
             self.client.upload_sync(remote_path=remote_path, local_path=tmp_path)
-            logger.info(f"Successfully uploaded file {file.filename} to {remote_path}")
+            logger.info(
+                "nextcloud_upload_completed",
+                remote_path_hash=hmac_sha256_hex(remote_path, settings.log_redaction_secret)[:16],
+                file_size=file.size,
+            )
             
             # Clean up
             if tmp_path and os.path.exists(tmp_path):
@@ -101,7 +122,11 @@ class NextcloudService:
             
             return True
         except Exception as e:
-            logger.error(f"Error uploading file {file.filename} to {remote_path}: {e}", exc_info=True)
+            logger.error(
+                "nextcloud_upload_failed",
+                remote_path_hash=hmac_sha256_hex(remote_path, settings.log_redaction_secret)[:16],
+                exc_info=True,
+            )
             # Clean up on error
             if tmp_path and os.path.exists(tmp_path):
                 try:
@@ -116,20 +141,30 @@ class NextcloudService:
         """
         tmp_path = None
         try:
-            logger.debug(f"Uploading metadata to {remote_path}")
+            logger.debug(
+                "nextcloud_metadata_upload_started",
+                remote_path_hash=hmac_sha256_hex(remote_path, settings.log_redaction_secret)[:16],
+            )
             with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as tmp_file:
                 json.dump(metadata, tmp_file, indent=2)
                 tmp_path = tmp_file.name
             
             self.client.upload_sync(remote_path=remote_path, local_path=tmp_path)
-            logger.info(f"Successfully uploaded metadata to {remote_path}")
+            logger.info(
+                "nextcloud_metadata_upload_completed",
+                remote_path_hash=hmac_sha256_hex(remote_path, settings.log_redaction_secret)[:16],
+            )
             
             if tmp_path and os.path.exists(tmp_path):
                 os.unlink(tmp_path)
             
             return True
         except Exception as e:
-            logger.error(f"Error uploading metadata to {remote_path}: {e}", exc_info=True)
+            logger.error(
+                "nextcloud_metadata_upload_failed",
+                remote_path_hash=hmac_sha256_hex(remote_path, settings.log_redaction_secret)[:16],
+                exc_info=True,
+            )
             if tmp_path and os.path.exists(tmp_path):
                 try:
                     os.unlink(tmp_path)
@@ -143,20 +178,32 @@ class NextcloudService:
         """
         tmp_path = None
         try:
-            logger.debug(f"Uploading content ({len(content)} chars) to {remote_path}")
+            logger.debug(
+                "nextcloud_content_upload_started",
+                remote_path_hash=hmac_sha256_hex(remote_path, settings.log_redaction_secret)[:16],
+                chars=len(content),
+            )
             with tempfile.NamedTemporaryFile(mode='w', delete=False, encoding='utf-8') as tmp_file:
                 tmp_file.write(content)
                 tmp_path = tmp_file.name
             
             self.client.upload_sync(remote_path=remote_path, local_path=tmp_path)
-            logger.info(f"Successfully uploaded content to {remote_path}")
+            logger.info(
+                "nextcloud_content_upload_completed",
+                remote_path_hash=hmac_sha256_hex(remote_path, settings.log_redaction_secret)[:16],
+                chars=len(content),
+            )
             
             if tmp_path and os.path.exists(tmp_path):
                 os.unlink(tmp_path)
             
             return True
         except Exception as e:
-            logger.error(f"Error uploading content to {remote_path}: {e}", exc_info=True)
+            logger.error(
+                "nextcloud_content_upload_failed",
+                remote_path_hash=hmac_sha256_hex(remote_path, settings.log_redaction_secret)[:16],
+                exc_info=True,
+            )
             if tmp_path and os.path.exists(tmp_path):
                 try:
                     os.unlink(tmp_path)
@@ -170,10 +217,9 @@ class NextcloudService:
         """
         tmp_path = None
         try:
-            logger.debug(f"Retrieving metadata for project: {project_id}")
+            logger.debug("nextcloud_metadata_retrieving", project_id=project_id)
             path = f"{settings.nextcloud_base_path}/{project_id}/metadata.json"
             if self.client.check(path):
-                logger.debug(f"Found metadata at: {path}")
                 with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
                     tmp_path = tmp_file.name
                 
@@ -185,15 +231,15 @@ class NextcloudService:
                 if tmp_path and os.path.exists(tmp_path):
                     os.unlink(tmp_path)
                 
-                logger.info(f"Successfully retrieved metadata for project: {project_id}")
+                logger.info("nextcloud_metadata_retrieved", project_id=project_id)
                 return metadata
             
-            logger.warning(f"Project {project_id} not found")
+            logger.warning("nextcloud_project_not_found", project_id=project_id)
             raise FileNotFoundError(f"Project {project_id} not found")
         except FileNotFoundError:
             raise
         except Exception as e:
-            logger.error(f"Error retrieving metadata for project {project_id}: {e}", exc_info=True)
+            logger.error("nextcloud_metadata_retrieve_failed", project_id=project_id, exc_info=True)
             if tmp_path and os.path.exists(tmp_path):
                 try:
                     os.unlink(tmp_path)
@@ -206,10 +252,17 @@ class NextcloudService:
         List files in a Nextcloud directory
         """
         try:
-            logger.debug(f"Listing files in: {path}")
             files = self.client.list(path)
-            logger.debug(f"Found {len(files)} files in {path}")
+            logger.debug(
+                "nextcloud_list_files_completed",
+                files_count=len(files),
+                path_hash=hmac_sha256_hex(path, settings.log_redaction_secret)[:16],
+            )
             return files
         except Exception as e:
-            logger.error(f"Error listing files in {path}: {e}", exc_info=True)
+            logger.error(
+                "nextcloud_list_files_failed",
+                path_hash=hmac_sha256_hex(path, settings.log_redaction_secret)[:16],
+                exc_info=True,
+            )
             raise

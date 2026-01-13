@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { FileCategory, Institution, ProjectType, WorkflowStep } from '../types';
 import { api, ApiError } from '../services/api';
+import { log } from '../utils/logger';
 
 function createNewProjectCategories(): FileCategory[] {
   return [
@@ -130,17 +131,15 @@ export function useDataProtectionWorkflow() {
     e.preventDefault();
 
     if (!validateForm()) {
-      console.warn('[Workflow] Form validation failed');
+      log.warn('workflow_form_validation_failed');
       return;
     }
 
-    console.log('[Workflow] Starting form submission', {
-      email,
-      projectTitle,
+    log.info('workflow_submission_started', {
       institution: selectedInstitution,
       projectType: selectedProjectType,
       categoriesCount: categories.length,
-      totalFiles: categories.reduce((sum, cat) => sum + cat.files.length, 0)
+      totalFiles: categories.reduce((sum, cat) => sum + cat.files.length, 0),
     });
 
     setIsSubmitting(true);
@@ -158,20 +157,20 @@ export function useDataProtectionWorkflow() {
         projectType: selectedProjectType
       });
 
-      console.log('[Workflow] Upload completed successfully:', result);
+      log.info('workflow_upload_completed', { success: result.success });
 
       if (result.success) {
         setUploadTimestamp(result.timestamp);
         setShowSuccess(true);
       } else {
-        console.warn('[Workflow] Upload returned success=false:', result);
+        log.warn('workflow_upload_returned_success_false');
         setErrors([result.message || t('error.uploadNotSuccessful')]);
       }
     } catch (error) {
       let errorMessage = t('error.uploadFailed');
       
       if (error instanceof Error) {
-        console.error('[Workflow] Upload error:', {
+        log.error('workflow_upload_error', {
           message: error.message,
           name: error.name,
           stack: error.stack
@@ -186,13 +185,13 @@ export function useDataProtectionWorkflow() {
           errorMessage = error.message;
         }
       } else {
-        console.error('[Workflow] Upload error (unknown type):', error);
+        log.error('workflow_upload_error_unknown');
       }
       
       setErrors([errorMessage]);
     } finally {
       setIsSubmitting(false);
-      console.log('[Workflow] Form submission finished');
+      log.info('workflow_submission_finished');
     }
   };
 
