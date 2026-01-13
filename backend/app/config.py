@@ -1,7 +1,10 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List, Literal
 
 class Settings(BaseSettings):
+    # Allow unrelated env vars (e.g. TZ/LOG_LEVEL/VITE_*) without crashing
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
     # API
     api_host: str = "0.0.0.0"
     api_port: int = 8000
@@ -39,8 +42,5 @@ class Settings(BaseSettings):
     # File Upload
     max_file_size: int = 52428800  # 50 MB
     allowed_file_types: List[str] = [".pdf", ".doc", ".docx", ".zip", ".odt", ".ods", ".odp", ".png", ".jpg", ".jpeg"]
-    
-    class Config:
-        env_file = ".env"
 
 settings = Settings()
