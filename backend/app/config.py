@@ -1,5 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import List, Literal
+from pydantic import field_validator
+from typing import List, Literal, Any
+import json
 
 class Settings(BaseSettings):
     # Allow unrelated env vars (e.g. TZ/LOG_LEVEL/VITE_*) without crashing
@@ -22,6 +24,29 @@ class Settings(BaseSettings):
         "http://localhost:5173",
         "http://127.0.0.1:5173",
     ]
+
+    @field_validator("cors_origins", mode="before")
+    @classmethod
+    def _parse_cors_origins(cls, v: Any) -> Any:
+        """
+        Accept both JSON arrays and comma-separated strings, e.g.
+        - CORS_ORIGINS='["https://ds.niceai.de","http://localhost:3000"]'
+        - CORS_ORIGINS='https://ds.niceai.de,http://localhost:3000'
+        """
+        if v is None or isinstance(v, list):
+            return v
+        if isinstance(v, str):
+            s = v.strip()
+            if not s:
+                return []
+            if s.startswith("["):
+                try:
+                    return json.loads(s)
+                except Exception:
+                    # Fall back to comma-separated parsing
+                    pass
+            return [item.strip() for item in s.split(",") if item.strip()]
+        return v
     
     # Nextcloud
     nextcloud_url: str
