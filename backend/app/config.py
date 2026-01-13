@@ -2,10 +2,29 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import field_validator
 from typing import List, Literal, Any
 import json
+from pathlib import Path
+
+
+def _find_env_file() -> str | None:
+    """
+    Find a .env file by walking upwards from the current working directory.
+    This keeps a single source of truth (.env in project root) while also
+    working in Docker where the app is typically run from /app.
+    """
+    try:
+        start = Path.cwd().resolve()
+    except Exception:
+        start = Path(".").resolve()
+
+    for p in [start, *start.parents]:
+        candidate = p / ".env"
+        if candidate.exists() and candidate.is_file():
+            return str(candidate)
+    return None
 
 class Settings(BaseSettings):
     # Allow unrelated env vars (e.g. TZ/LOG_LEVEL/VITE_*) without crashing
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(env_file=_find_env_file(), extra="ignore")
 
     # Logging
     log_level: str = "INFO"

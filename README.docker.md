@@ -42,9 +42,21 @@ docker-compose -f docker-compose.dev.yml down
 
 ## Environment Variables
 
-### Backend
+### Zentral (Root)
 
-Create `backend/.env` with required configuration:
+Es gibt **genau eine** `.env` im Projekt-Root.
+
+1) Beispiel kopieren:
+
+```bash
+cp env.example .env
+```
+
+2) Werte in `.env` anpassen.
+
+> Hinweis: `.env` ist via `.gitignore` ausgeschlossen und darf keine Secrets im Repo hinterlassen.
+
+### Backend
 
 ```env
 LOG_LEVEL=INFO
@@ -66,7 +78,7 @@ API_TOKEN=your-api-token
 
 ### Frontend
 
-For development, set environment variables in `docker-compose.dev.yml` or create `frontend/.env`:
+Für Development kannst du VITE-Variablen ebenfalls in `.env` setzen (Compose/Vite nutzen diese).
 
 ```env
 VITE_API_URL=http://localhost:8000/api
