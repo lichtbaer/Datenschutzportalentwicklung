@@ -41,6 +41,8 @@ export function useDataProtectionWorkflow() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [uploadTimestamp, setUploadTimestamp] = useState('');
+  const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle');
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
   const [warnings, setWarnings] = useState<string[]>([]);
 
@@ -129,6 +131,8 @@ export function useDataProtectionWorkflow() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setUploadStatus('idle');
+    setUploadError(null);
 
     if (!validateForm()) {
       log.warn('workflow_form_validation_failed');
@@ -144,6 +148,8 @@ export function useDataProtectionWorkflow() {
 
     setIsSubmitting(true);
     setErrors([]);
+    setUploadStatus('uploading');
+    setUploadError(null);
 
     try {
       const result = await api.upload({
@@ -162,9 +168,13 @@ export function useDataProtectionWorkflow() {
       if (result.success) {
         setUploadTimestamp(result.timestamp);
         setShowSuccess(true);
+        setUploadStatus('success');
       } else {
         log.warn('workflow_upload_returned_success_false');
-        setErrors([result.message || t('error.uploadNotSuccessful')]);
+        const message = result.message || t('error.uploadNotSuccessful');
+        setErrors([message]);
+        setUploadError(message);
+        setUploadStatus('error');
       }
     } catch (error) {
       let errorMessage = t('error.uploadFailed');
@@ -189,10 +199,17 @@ export function useDataProtectionWorkflow() {
       }
       
       setErrors([errorMessage]);
+      setUploadError(errorMessage);
+      setUploadStatus('error');
     } finally {
       setIsSubmitting(false);
       log.info('workflow_submission_finished');
     }
+  };
+
+  const handleDismissUploadStatus = () => {
+    setUploadStatus('idle');
+    setUploadError(null);
   };
 
   const handleNewUpload = () => {
@@ -204,6 +221,8 @@ export function useDataProtectionWorkflow() {
     setCategories(createNewProjectCategories());
     setShowSuccess(false);
     setUploadTimestamp('');
+    setUploadStatus('idle');
+    setUploadError(null);
     setErrors([]);
     setWarnings([]);
     setCurrentStep('projectType');
@@ -225,6 +244,8 @@ export function useDataProtectionWorkflow() {
     isSubmitting,
     showSuccess,
     uploadTimestamp,
+    uploadStatus,
+    uploadError,
     errors,
     warnings,
     categories,
@@ -244,6 +265,7 @@ export function useDataProtectionWorkflow() {
     handleFilesAdded,
     handleFileRemoved,
     handleSubmit,
+    handleDismissUploadStatus,
     handleNewUpload
   };
 }

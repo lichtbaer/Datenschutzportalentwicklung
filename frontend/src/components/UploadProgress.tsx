@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-import { Upload, CheckCircle2, Cloud, Mail, FileCheck, Loader2 } from 'lucide-react';
+import { Upload, CheckCircle2, Cloud, Mail, FileCheck, Loader2, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 type UploadPhase = 
@@ -12,6 +12,8 @@ type UploadPhase =
   | 'completing'
   | 'done';
 
+type UploadStatus = 'idle' | 'uploading' | 'success' | 'error';
+
 interface PhaseInfo {
   label: string;
   icon: React.ReactNode;
@@ -20,8 +22,10 @@ interface PhaseInfo {
 }
 
 interface UploadProgressProps {
-  isUploading: boolean;
+  status: UploadStatus;
   filesCount: number;
+  errorMessage?: string;
+  onDismiss?: () => void;
 }
 
 const PHASE_ORDER: UploadPhase[] = [
@@ -34,7 +38,7 @@ const PHASE_ORDER: UploadPhase[] = [
   'completing',
 ];
 
-export function UploadProgress({ isUploading, filesCount }: UploadProgressProps) {
+export function UploadProgress({ status, filesCount, errorMessage, onDismiss }: UploadProgressProps) {
   const { t } = useLanguage();
   const [currentPhase, setCurrentPhase] = useState<UploadPhase>('preparing');
   const [progress, setProgress] = useState(0);
@@ -91,11 +95,17 @@ export function UploadProgress({ isUploading, filesCount }: UploadProgressProps)
     },
   }), [t, filesCount]);
 
+  const isUploading = status === 'uploading';
+
   useEffect(() => {
-    if (!isUploading) {
-      if (progress > 0) {
+    if (status !== 'uploading') {
+      if (status === 'success') {
         setCurrentPhase('done');
         setProgress(100);
+      } else {
+        setProgress(0);
+        setElapsedTime(0);
+        setCurrentPhase('preparing');
       }
       return;
     }
@@ -145,14 +155,48 @@ export function UploadProgress({ isUploading, filesCount }: UploadProgressProps)
       timers.forEach(timer => clearTimeout(timer));
       clearInterval(timeInterval);
     };
-  }, [isUploading, filesCount, phases]);
+  }, [status, filesCount, phases]);
 
-  if (!isUploading && progress === 0) {
+  if (status === 'idle') {
     return null;
   }
 
+  if (status === 'error') {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
+          <div className="text-center mb-6">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-red-100">
+              <AlertCircle className="w-8 h-8 text-red-600" />
+            </div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              {t('upload.failed')}
+            </h2>
+            <p className="text-gray-600">
+              {t('upload.failed.desc')}
+            </p>
+          </div>
+
+          {errorMessage && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+              <p className="text-red-800 text-sm">{errorMessage}</p>
+            </div>
+          )}
+
+          <button
+            type="button"
+            onClick={onDismiss}
+            className="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-lg transition-colors"
+          >
+            {t('upload.close')}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const currentPhaseInfo = phases[currentPhase];
-  const isComplete = currentPhase === 'done';
+  const isComplete = status === 'success' || currentPhase === 'done';
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">

@@ -27,6 +27,8 @@ export function DataProtectionPortal() {
     isSubmitting,
     showSuccess,
     uploadTimestamp,
+    uploadStatus,
+    uploadError,
     errors,
     warnings,
     categories,
@@ -44,6 +46,7 @@ export function DataProtectionPortal() {
     handleFilesAdded,
     handleFileRemoved,
     handleSubmit: originalHandleSubmit,
+    handleDismissUploadStatus,
     handleNewUpload
   } = useDataProtectionWorkflow();
 
@@ -110,6 +113,9 @@ export function DataProtectionPortal() {
         onFileRemoved={handleFileRemoved}
         onSubmit={originalHandleSubmit}
         isSubmitting={isSubmitting}
+        uploadStatus={uploadStatus}
+        uploadError={uploadError}
+        onDismissUploadStatus={handleDismissUploadStatus}
         errors={errors}
         warnings={warnings}
       />
@@ -341,7 +347,12 @@ export function DataProtectionPortal() {
         </form>
 
         {/* Upload Progress */}
-        <UploadProgress isUploading={isSubmitting} filesCount={totalFiles} />
+        <UploadProgress
+          status={uploadStatus}
+          filesCount={totalFiles}
+          errorMessage={uploadError || undefined}
+          onDismiss={handleDismissUploadStatus}
+        />
       </div>
     </div>
   );

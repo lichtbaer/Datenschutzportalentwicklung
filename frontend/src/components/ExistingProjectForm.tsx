@@ -26,6 +26,9 @@ interface ExistingProjectFormProps {
   onFileRemoved: (key: string, index: number) => void;
   onSubmit: (e: React.FormEvent) => void;
   isSubmitting: boolean;
+  uploadStatus: 'idle' | 'uploading' | 'success' | 'error';
+  uploadError?: string | null;
+  onDismissUploadStatus: () => void;
   errors: string[];
   warnings: string[];
 }
@@ -46,6 +49,9 @@ export function ExistingProjectForm({
   onFileRemoved,
   onSubmit: originalOnSubmit,
   isSubmitting,
+  uploadStatus,
+  uploadError,
+  onDismissUploadStatus,
   errors,
   warnings
 }: ExistingProjectFormProps) {
@@ -290,7 +296,12 @@ export function ExistingProjectForm({
         </form>
 
         {/* Upload Progress */}
-        <UploadProgress isUploading={isSubmitting} filesCount={totalFiles} />
+        <UploadProgress
+          status={uploadStatus}
+          filesCount={totalFiles}
+          errorMessage={uploadError || undefined}
+          onDismiss={onDismissUploadStatus}
+        />
       </div>
     </div>
   );
