@@ -39,6 +39,10 @@ def _redact_processor(
     return event_dict
 
 
+def _orjson_dumps(value: Any, **_: Any) -> str:
+    return orjson.dumps(value).decode("utf-8")
+
+
 def configure_logging(
     *,
     service_name: str,
@@ -66,7 +70,7 @@ def configure_logging(
         structlog.processors.UnicodeDecoder(),
     ]
 
-    renderer = structlog.processors.JSONRenderer(serializer=orjson.dumps)
+    renderer = structlog.processors.JSONRenderer(serializer=_orjson_dumps)
 
     formatter = structlog.stdlib.ProcessorFormatter(
         processor=renderer,

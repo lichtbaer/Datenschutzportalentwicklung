@@ -1,4 +1,9 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import (
+    BaseSettings,
+    SettingsConfigDict,
+    EnvSettingsSource,
+    DotEnvSettingsSource,
+)
 from pydantic import field_validator
 from typing import List, Literal, Any
 import json
@@ -22,9 +27,40 @@ def _find_env_file() -> str | None:
             return str(candidate)
     return None
 
+class _LenientEnvSettingsSource(EnvSettingsSource):
+    def decode_complex_value(self, field_name: str, field: Any, value: str) -> Any:
+        try:
+            return json.loads(value)
+        except Exception:
+            return value
+
+
+class _LenientDotenvSettingsSource(DotEnvSettingsSource):
+    def decode_complex_value(self, field_name: str, field: Any, value: str) -> Any:
+        try:
+            return json.loads(value)
+        except Exception:
+            return value
+
 class Settings(BaseSettings):
-    # Allow unrelated env vars (e.g. TZ/LOG_LEVEL/VITE_*) without crashing
+    # Allow unrelated env vars (e.g. TZ/LOG_LEVEL/VITE_*) without crashing.
     model_config = SettingsConfigDict(env_file=_find_env_file(), extra="ignore")
+
+    @classmethod
+    def settings_customise_sources(
+        cls,
+        settings_cls,
+        init_settings,
+        env_settings,
+        dotenv_settings,
+        file_secret_settings,
+    ):
+        return (
+            init_settings,
+            _LenientEnvSettingsSource(settings_cls),
+            _LenientDotenvSettingsSource(settings_cls),
+            file_secret_settings,
+        )
 
     # Logging
     log_level: str = "INFO"
@@ -63,6 +99,50 @@ class Settings(BaseSettings):
                     return json.loads(s)
                 except Exception:
                     # Fall back to comma-separated parsing
+                    pass
+            return [item.strip() for item in s.split(",") if item.strip()]
+        return v
+
+    @field_validator("notification_emails", mode="before")
+    @classmethod
+    def _parse_notification_emails(cls, v: Any) -> Any:
+        """
+        Accept both JSON arrays and comma-separated strings, e.g.
+        - NOTIFICATION_EMAILS='["team1@example.com","team2@example.com"]'
+        - NOTIFICATION_EMAILS=team1@example.com,team2@example.com
+        """
+        if v is None or isinstance(v, list):
+            return v
+        if isinstance(v, str):
+            s = v.strip()
+            if not s:
+                return []
+            if s.startswith("["):
+                try:
+                    return json.loads(s)
+                except Exception:
+                    pass
+            return [item.strip() for item in s.split(",") if item.strip()]
+        return v
+
+    @field_validator("allowed_file_types", mode="before")
+    @classmethod
+    def _parse_allowed_file_types(cls, v: Any) -> Any:
+        """
+        Accept both JSON arrays and comma-separated strings, e.g.
+        - ALLOWED_FILE_TYPES='[".pdf",".docx",".zip"]'
+        - ALLOWED_FILE_TYPES=.pdf,.docx,.zip
+        """
+        if v is None or isinstance(v, list):
+            return v
+        if isinstance(v, str):
+            s = v.strip()
+            if not s:
+                return []
+            if s.startswith("["):
+                try:
+                    return json.loads(s)
+                except Exception:
                     pass
             return [item.strip() for item in s.split(",") if item.strip()]
         return v
