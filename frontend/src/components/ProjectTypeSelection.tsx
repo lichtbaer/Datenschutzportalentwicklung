@@ -85,7 +85,7 @@ export function ProjectTypeSelection({ onSelect }: ProjectTypeSelectionProps) {
         {/* Info Box */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <p className="text-blue-900 text-sm">
-            <span className="font-semibold">Hinweis:</span> {t('projectType.info')}
+            <span className="font-semibold">{t('projectType.noteLabel')}:</span> {t('projectType.info')}
           </p>
         </div>
       </div>

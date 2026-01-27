@@ -30,6 +30,7 @@ const translations = {
     'projectType.existing': 'Eingereichtes Projekt bearbeiten',
     'projectType.existing.desc': 'Laden Sie zusätzliche Dokumente für ein bereits eingereichtes Projekt hoch',
     'projectType.info': 'Für eingereichte Projekte benötigen Sie Ihre Projekttitel (Kurztitel) zur Identifikation.',
+    'projectType.noteLabel': 'Hinweis',
     'projectType.back': 'Zurück zur Institution-Auswahl',
     
     // Existing Project Form
@@ -198,6 +199,7 @@ const translations = {
     'projectType.existing': 'Edit Existing Project',
     'projectType.existing.desc': 'Upload additional documents for an existing project',
     'projectType.info': 'Note: For existing projects, you need your project title (short title) for identification.',
+    'projectType.noteLabel': 'Note',
     'projectType.back': 'Back to Institution Selection',
     
     // Existing Project Form
