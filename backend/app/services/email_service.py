@@ -101,20 +101,31 @@ class EmailService:
         uploader_name: str,
         files: List[Dict],
         project_type: ProjectType = "new",
+        language: str = "de",
     ) -> bool:
         """
         Send confirmation email to user.
         For resubmissions (existing projects), we use a dedicated template/subject with the same base layout.
         """
         is_resubmission = project_type == "existing"
-        subject_prefix = "Bestätigung Nachreichung" if is_resubmission else "Bestätigung Upload"
-        subject = f"{subject_prefix}: {project_title} (ID: {project_id})"
+        use_english = language == "en"
 
-        template_name = (
-            "email_confirmation_resubmission_de.html"
-            if is_resubmission
-            else "email_confirmation_de.html"
-        )
+        if use_english:
+            subject_prefix = "Resubmission Confirmation" if is_resubmission else "Upload Confirmation"
+            template_name = (
+                "email_confirmation_resubmission_en.html"
+                if is_resubmission
+                else "email_confirmation_en.html"
+            )
+        else:
+            subject_prefix = "Bestätigung Nachreichung" if is_resubmission else "Bestätigung Upload"
+            template_name = (
+                "email_confirmation_resubmission_de.html"
+                if is_resubmission
+                else "email_confirmation_de.html"
+            )
+
+        subject = f"{subject_prefix}: {project_title} (ID: {project_id})"
         
         context = {
             "project_id": project_id,

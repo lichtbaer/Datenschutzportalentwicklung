@@ -1,11 +1,11 @@
 {% extends "base_en.html" %}
 
-{% block title %}Upload Confirmation - {{ project_title }}{% endblock %}
+{% block title %}Resubmission Confirmation - {{ project_title }}{% endblock %}
 
 {% block content %}
-<h2>Upload completed</h2>
+<h2>Resubmission completed</h2>
 <p>Dear {{ uploader_name or 'User' }},</p>
-<p>Thank you for your submission. Your project has been recorded successfully and the documents have been securely stored in the next.Hessencloud.</p>
+<p>Thank you for your resubmission. Your additional documents have been received successfully and stored securely in the next.Hessencloud.</p>
 
 <div class="info-box">
     <table class="metadata-table">
@@ -21,6 +21,10 @@
             <td>Timestamp</td>
             <td>{{ timestamp or 'Just now' }}</td>
         </tr>
+        <tr>
+            <td>Process</td>
+            <td><strong>Resubmission</strong></td>
+        </tr>
     </table>
 </div>
 
@@ -34,13 +38,11 @@
     {% endfor %}
 </ul>
 
-<h3>Notes</h3>
-<p>If you have any questions, you will be contacted by email.</p>
-<p>For new submissions only, once the documents are complete: If you do not hear from us within 14 days, your project is automatically approved and you can start. This does not apply to exceptions to the standard according to SOP.</p>
-<p>Please note that under the current process, only random spot checks are planned.</p>
+<h3>Further notes</h3>
+<p>If additional documents are required, or if your project is selected for a spot check and questions arise, we will contact you by email.</p>
 
 <p>
-    <strong>Important:</strong> Please keep this email as proof of your submission.
+    <strong>Important:</strong> Please keep this email as proof of your resubmission.
     If you have any questions, please always mention your project title ({{ project_title }}) and upload date.
 </p>
 {% endblock %}

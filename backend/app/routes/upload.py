@@ -29,7 +29,8 @@ async def upload_documents(
     project_details: str = Form(None),
     files: List[UploadFile] = File(...),
     file_categories: str = Form(None),
-    project_type: str = Form("new")
+    project_type: str = Form("new"),
+    language: str = Form("de")
 ):
     """
     Upload data protection documents to Nextcloud
@@ -41,6 +42,7 @@ async def upload_documents(
         files_count=len(files),
         project_type=project_type,
         is_prospective_study=is_prospective_study,
+            language=language,
     )
     
     try:
@@ -148,7 +150,8 @@ async def upload_documents(
             "is_prospective_study": is_prospective_study,
             "upload_timestamp": datetime.now().isoformat(),
             "files": uploaded_files,
-            "project_type": project_type
+            "project_type": project_type,
+            "language": language
         }
         
         metadata_path = f"{project_path}/metadata.json"
@@ -192,7 +195,8 @@ async def upload_documents(
                 project_title=project_title,
                 uploader_name=uploader_name,
                 files=uploaded_files,
-                project_type=project_type
+                project_type=project_type,
+                language=language
             )
             logger.info("confirmation_email_sent", project_id=project_id, email_hash=email_hash)
         except Exception as e:

@@ -25,7 +25,7 @@ function createExistingProjectCategories(): FileCategory[] {
 }
 
 export function useDataProtectionWorkflow() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   // Workflow state
   const [currentStep, setCurrentStep] = useState<WorkflowStep>('projectType');
@@ -160,7 +160,8 @@ export function useDataProtectionWorkflow() {
         institution: selectedInstitution || 'university',
         isProspectiveStudy,
         categories,
-        projectType: selectedProjectType
+        projectType: selectedProjectType,
+        language
       });
 
       log.info('workflow_upload_completed', { success: result.success });

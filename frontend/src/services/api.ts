@@ -10,6 +10,7 @@ export interface UploadData {
   projectDetails?: string;
   categories: FileCategory[];
   projectType: 'new' | 'existing' | null;
+  language: 'de' | 'en';
 }
 
 export interface UploadResult {
@@ -68,6 +69,7 @@ export const api = {
       formData.append('project_details', data.projectDetails);
     }
     formData.append('project_type', data.projectType || 'new');
+    formData.append('language', data.language);
 
     // Process files and categories
     const categoryMap: Record<string, string> = {};
