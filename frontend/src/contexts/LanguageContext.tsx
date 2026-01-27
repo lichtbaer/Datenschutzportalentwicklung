@@ -198,7 +198,7 @@ const translations = {
     'projectType.new.desc': 'Submit data protection documents for a new research project',
     'projectType.existing': 'Edit Existing Project',
     'projectType.existing.desc': 'Upload additional documents for an existing project',
-    'projectType.info': 'Note: For existing projects, you need your project title (short title) for identification.',
+    'projectType.info': 'For existing projects, you need your project title (short title) for identification.',
     'projectType.noteLabel': 'Note',
     'projectType.back': 'Back to Institution Selection',
     
