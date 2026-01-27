@@ -7,6 +7,17 @@
 <p>Dear {{ uploader_name or 'User' }},</p>
 <p>Thank you for your resubmission. Your additional documents have been received successfully and stored securely in the next.Hessencloud.</p>
 
+{% set category_labels = {
+    "datenschutzkonzept": "Data protection concept",
+    "verantwortung": "Commitment to legally compliant data use",
+    "schulung_uni": "Training certificate (Goethe University Frankfurt)",
+    "schulung_ukf": "UMF training certificate (University Hospital Frankfurt)",
+    "einwilligung": "Consent form(s)/PatInfo(s)",
+    "ethikvotum": "Ethics approval",
+    "sonstiges": "Other",
+    "nachzureichende_daten": "Documents to be submitted later"
+} %}
+
 <div class="info-box">
     <table class="metadata-table">
         <tr>
@@ -33,7 +44,7 @@
     {% for file in files %}
     <li>
         <strong>{{ file.filename }}</strong><br>
-        <span style="font-size: 13px; color: #6b7280;">Type: {{ file.category }}</span>
+        <span style="font-size: 13px; color: #6b7280;">Type: {{ category_labels.get(file.category, file.category) }}</span>
     </li>
     {% endfor %}
 </ul>

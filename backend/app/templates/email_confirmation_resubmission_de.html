@@ -7,6 +7,17 @@
 <p>Sehr geehrte(r) {{ uploader_name or 'Nutzer' }},</p>
 <p>vielen Dank für Ihre Nachreichung. Ihre zusätzlichen Unterlagen wurden erfolgreich entgegengenommen und sicher in der next.Hessenbox gespeichert.</p>
 
+{% set category_labels = {
+    "datenschutzkonzept": "Datenschutzkonzept",
+    "verantwortung": "Dokument zur rechtskonformen Datennutzung",
+    "schulung_uni": "Nachweis der Schulung GU (Goethe Universität Frankfurt)",
+    "schulung_ukf": "Nachweis der Schulung UMF (Universitätsmedizin Frankfurt)",
+    "einwilligung": "Einwilligungsformular(e)/PatInfo(s)",
+    "ethikvotum": "Ethikvotum",
+    "sonstiges": "Sonstiges",
+    "nachzureichende_daten": "Nachzureichende Unterlagen"
+} %}
+
 <div class="info-box">
     <table class="metadata-table">
         <tr>
@@ -33,7 +44,7 @@
     {% for file in files %}
     <li>
         <strong>{{ file.filename }}</strong><br>
-        <span style="font-size: 13px; color: #6b7280;">Art: {{ file.category }}</span>
+        <span style="font-size: 13px; color: #6b7280;">Art: {{ category_labels.get(file.category, file.category) }}</span>
     </li>
     {% endfor %}
 </ul>
