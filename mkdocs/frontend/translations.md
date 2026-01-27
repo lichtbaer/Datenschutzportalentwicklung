@@ -112,7 +112,7 @@ const { t, language, setLanguage } = useLanguage();
 | Key | DE | EN |
 |-----|----|----|
 | `upload.dropzone` | Klicken Sie hier oder ziehen Sie Dateien hierher | Click here or drag files here |
-| `upload.formats` | PDF, DOC, DOCX, ZIP oder andere Dateiformate | PDF, DOC, DOCX, ZIP or other file formats |
+| `upload.formats` | PDF, DOC, DOCX, ODT, ODS, ODP, ZIP, PNG, JPG, XLSX, CSV, ODF | PDF, DOC, DOCX, ODT, ODS, ODP, ZIP, PNG, JPG, XLSX, CSV, ODF |
 | `upload.preview` | Vorschau | Preview |
 | `upload.close` | Schließen | Close |
 

@@ -89,7 +89,7 @@ const translations = {
     
     // File Upload
     'upload.dropzone': 'Klicken Sie hier oder ziehen Sie Dateien hier hin',
-    'upload.formats': 'PDF, DOC, DOCX, ODT, ODS, ODP, ZIP, PNG, JPG',
+    'upload.formats': 'PDF, DOC, DOCX, ODT, ODS, ODP, ZIP, PNG, JPG, XLSX, CSV, ODF',
     'upload.preview': 'Vorschau',
     'upload.close': 'Schließen',
     'upload.inProgress': 'Dokumente werden hochgeladen...',
@@ -256,7 +256,7 @@ const translations = {
     
     // File Upload
     'upload.dropzone': 'Click here or drag files here',
-    'upload.formats': 'PDF, DOC, DOCX, ODT, ODS, ODP, ZIP, PNG, JPG',
+    'upload.formats': 'PDF, DOC, DOCX, ODT, ODS, ODP, ZIP, PNG, JPG, XLSX, CSV, ODF',
     'upload.preview': 'Preview',
     'upload.close': 'Close',
     'upload.inProgress': 'Documents are being uploaded...',

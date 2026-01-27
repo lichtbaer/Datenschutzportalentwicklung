@@ -143,7 +143,7 @@ ALGORITHM=HS256
 
 # File Upload Limits
 MAX_FILE_SIZE=52428800  # 50 MB in Bytes
-ALLOWED_FILE_TYPES=.pdf,.doc,.docx,.zip,.txt
+ALLOWED_FILE_TYPES=.pdf,.doc,.docx,.odt,.ods,.odp,.zip,.png,.jpg,.jpeg,.xlsx,.csv,.odf
 ```
 
 ### config.py
@@ -183,7 +183,21 @@ class Settings(BaseSettings):
     
     # File Upload
     max_file_size: int = 52428800  # 50 MB
-    allowed_file_types: List[str] = [".pdf", ".doc", ".docx", ".zip", ".odt", ".ods", ".odp", ".png", ".jpg", ".jpeg"]
+    allowed_file_types: List[str] = [
+        ".pdf",
+        ".doc",
+        ".docx",
+        ".zip",
+        ".odt",
+        ".ods",
+        ".odp",
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".xlsx",
+        ".csv",
+        ".odf",
+    ]
     
     class Config:
         env_file = ".env"
