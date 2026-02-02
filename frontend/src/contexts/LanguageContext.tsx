@@ -79,7 +79,7 @@ const translations = {
     
     // Categories
     'category.datenschutzkonzept': 'Datenschutzkonzept',
-    'category.verantwortung': 'Dokument zur rechtskonformen Datennutzung',
+    'category.verantwortung': 'Dokument Verpflichtung zur rechtskonformen Datennutzung',
     'category.schulung_uni': 'Nachweis der Schulung GU (Goethe Universität Frankfurt)',
     'category.schulung_ukf': 'Nachweis der Schulung UMF (Universitätsmedizin Frankfurt)',
     'category.einwilligung': 'Einwilligungsformular(e)/PatInfo(s)',
@@ -124,8 +124,8 @@ const translations = {
     'error.emailInvalid': 'Bitte geben Sie eine gültige E-Mail-Adresse ein',
     'error.titleRequired': 'Projekttitel ist erforderlich',
     'error.categoryRequired': 'ist ein Pflichtfeld',
-    'error.uploadFailed': 'Ein Fehler ist beim Upload aufgetreten. Bitte versuchen Sie es erneut.',
-    'error.legalRequired': 'Bitte bestätigen Sie die rechtskonforme Nutzung der Daten.',
+    'error.uploadFailed': 'Ein Fehler ist beim Upload aufgetreten. Bitte versuchen Sie es erneut. Beachten Sie bitte die zulässigen Dateitypen und -größen.',
+    'error.legalRequired': 'Bitte bestätigen Sie die Verpflichtung zur rechtskonformen Nutzung der Daten.',
     'error.uploadNotSuccessful': 'Upload wurde nicht erfolgreich abgeschlossen.',
     'error.network': 'Verbindungsfehler: Die Verbindung zum Server konnte nicht hergestellt werden. Bitte überprüfen Sie Ihre Internetverbindung.',
     'error.authFailed': 'Authentifizierung fehlgeschlagen. Bitte überprüfen Sie das API-Token.',
