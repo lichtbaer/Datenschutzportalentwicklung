@@ -248,7 +248,7 @@ const translations = {
     
     // Categories
     'category.datenschutzkonzept': 'Data Protection Concept',
-    'category.verantwortung': 'I confirm the legally compliant use of the data',
+    'category.verantwortung': 'Commitment to legally compliant data use ("Verpflichtung zur rechtskonformen Datennutzung")',
     'category.schulung_uni': 'Training certificate (Goethe University Frankfurt)',
     'category.schulung_ukf': 'UMF training certificate (University Hospital Frankfurt)',
     'category.einwilligung': 'Consent Form(s)/PatInfo(s)',
@@ -293,7 +293,7 @@ const translations = {
     'error.emailInvalid': 'Please enter a valid email address',
     'error.titleRequired': 'Project title is required',
     'error.categoryRequired': 'is a required field',
-    'error.uploadFailed': 'An error occurred during upload. Please try again.',
+    'error.uploadFailed': 'An error occurred during upload. Please try again. Be sure to check the allowed file types and sizes.',
     'error.legalRequired': 'Please confirm the legally compliant use of the data.',
     'error.uploadNotSuccessful': 'Upload was not completed successfully.',
     'error.network': 'Connection error: Unable to reach the server. Please check your internet connection.',
