@@ -162,6 +162,7 @@ const translations = {
     'confirmation.note': 'Bitte beachten Sie, dass unter dem aktuellen Verfahren nur Stichprobenprüfungen vorgesehen sind.',
     'confirmation.newUpload': 'Weiteren Upload durchführen',
     'confirmation.footer': 'Bei Fragen wenden Sie sich bitte an das Datenschutz-Team',
+    'confirmation.emailContact': 'Kontakt per E-Mail an das Datenschutz-Team.',
     'confirmation.institution': 'Goethe Universität Frankfurt (GU) / Universitätsmedizin Frankfurt (UMF)',
     
     // Common
@@ -331,6 +332,7 @@ const translations = {
     'confirmation.note': 'Please note that under the current process, only random spot checks are planned.',
     'confirmation.newUpload': 'Perform Another Upload',
     'confirmation.footer': 'If you have questions, please contact the Data Protection Team',
+    'confirmation.emailContact': 'Contact the Data Protection Team by email.',
     'confirmation.institution': 'University of Frankfurt / University Hospital',
     
     // Common
