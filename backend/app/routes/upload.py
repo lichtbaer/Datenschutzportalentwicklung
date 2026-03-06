@@ -1,17 +1,77 @@
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends
-from typing import List
+from fastapi import APIRouter, Request, UploadFile, File, Form, HTTPException, Depends
+from pydantic import EmailStr, TypeAdapter
+from typing import List, Optional
 from app.services.nextcloud import NextcloudService
 from app.services.email_service import EmailService
 from app.models.upload import UploadResponse
 from app.config import settings
 from app.utils.auth import verify_token
+from app.limiter import limiter
 from datetime import datetime
+import filetype
 import os
 import json
 import re
 import structlog
 
 from app.logging_config import hmac_sha256_hex
+
+_email_adapter = TypeAdapter(EmailStr)
+
+# Mapping of allowed file extensions to permitted MIME types (magic-bytes check).
+# Prevents extension spoofing (CWE-434 / OWASP A01).
+_ALLOWED_MIME_BY_EXT: dict[str, set[str]] = {
+    ".pdf":  {"application/pdf"},
+    ".doc":  {"application/msword"},
+    ".docx": {"application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
+    ".odt":  {"application/vnd.oasis.opendocument.text"},
+    ".ods":  {"application/vnd.oasis.opendocument.spreadsheet"},
+    ".odp":  {"application/vnd.oasis.opendocument.presentation"},
+    ".odf":  {"application/vnd.oasis.opendocument.formula"},
+    ".zip":  {"application/zip"},
+    ".png":  {"image/png"},
+    ".jpg":  {"image/jpeg"},
+    ".jpeg": {"image/jpeg"},
+    ".xlsx": {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
+    ".csv":  {"text/plain", "text/csv", "application/csv"},
+}
+
+
+def _check_magic_bytes(data: bytes, extension: str) -> bool:
+    """
+    Verify that the file's magic bytes match the declared extension.
+    Returns True if valid, False if the content type does not match.
+    CSV files have no unique magic bytes and are allowed through as-is.
+    """
+    allowed_mimes = _ALLOWED_MIME_BY_EXT.get(extension)
+    if allowed_mimes is None:
+        return False
+    # CSV: no magic bytes – trust the extension (size/content limits still apply)
+    if extension == ".csv":
+        return True
+    kind = filetype.guess(data)
+    if kind is None:
+        # filetype couldn't detect – only allow CSV (handled above) and plain text
+        return False
+    return kind.mime in allowed_mimes
+
+
+def _sanitize_filename(filename: str) -> str:
+    """
+    Sanitize an uploaded filename to prevent path traversal (CWE-22 / OWASP A01).
+    Strips directory components and replaces unsafe characters.
+    """
+    # Take only the basename – discard any path components (e.g. "../../etc/passwd.pdf")
+    name = os.path.basename(filename)
+    # Replace characters that are dangerous in file-system paths
+    name = re.sub(r'[^\w.\-]', '_', name)
+    # Collapse multiple dots to prevent extension spoofing like "file..pdf"
+    name = re.sub(r'\.{2,}', '.', name)
+    # Limit length to avoid filesystem issues
+    if len(name) > 200:
+        stem, sep, suffix = name.rpartition('.')
+        name = stem[:196] + sep + suffix if sep else name[:200]
+    return name or "file"
 
 logger = structlog.get_logger(__name__)
 
@@ -20,7 +80,9 @@ nextcloud = NextcloudService()
 email_service = EmailService()
 
 @router.post("/upload", response_model=UploadResponse, dependencies=[Depends(verify_token)])
+@limiter.limit("10/hour")  # Rate limit: max 10 uploads per IP per hour (OWASP A04)
 async def upload_documents(
+    request: Request,
     email: str = Form(...),
     uploader_name: str = Form(None),
     project_title: str = Form(...),
@@ -35,6 +97,20 @@ async def upload_documents(
     """
     Upload data protection documents to Nextcloud
     """
+    # Validate email format (OWASP A03 – Injection / input validation)
+    try:
+        email = _email_adapter.validate_python(email)
+    except Exception:
+        raise HTTPException(status_code=422, detail="Invalid email address")
+
+    # Restrict project_type to known values to prevent unexpected behaviour
+    if project_type not in ("new", "existing"):
+        raise HTTPException(status_code=422, detail="Invalid project_type")
+
+    # Restrict language to known values
+    if language not in ("de", "en"):
+        raise HTTPException(status_code=422, detail="Invalid language")
+
     email_hash = hmac_sha256_hex(email, settings.log_redaction_secret)
     logger.info(
         "upload_received",
@@ -86,15 +162,27 @@ async def upload_documents(
                     status_code=413,
                     detail=f"File {file.filename} exceeds maximum size of 50 MB"
                 )
-            
-            file_ext = os.path.splitext(file.filename)[1].lower()
+
+            # Sanitize filename before extension check to prevent path traversal (OWASP A01 / CWE-22)
+            safe_name = _sanitize_filename(file.filename or "upload")
+            file_ext = os.path.splitext(safe_name)[1].lower()
             if file_ext not in settings.allowed_file_types:
                 logger.warning("file_extension_disallowed", file_extension=file_ext)
                 raise HTTPException(
                     status_code=400,
                     detail=f"File type {file_ext} not allowed"
                 )
-        
+
+            # Magic-bytes check: verify actual file content matches the declared extension (CWE-434)
+            header = await file.read(261)  # 261 bytes is sufficient for filetype detection
+            await file.seek(0)
+            if not _check_magic_bytes(header, file_ext):
+                logger.warning("file_magic_bytes_mismatch", file_extension=file_ext)
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"File content does not match declared type {file_ext}"
+                )
+
         logger.info("files_validation_passed")
         
         # Create project folder structure
@@ -121,17 +209,19 @@ async def upload_documents(
         uploaded_files = []
         logger.info("files_upload_started", project_id=project_id, files_count=len(files))
         for idx, file in enumerate(files, 1):
-            category = categories_map.get(file.filename, "sonstiges")
+            # Sanitize the filename to prevent path traversal on the remote storage (OWASP A01 / CWE-22)
+            safe_name = _sanitize_filename(file.filename or "upload")
+            category = categories_map.get(file.filename, categories_map.get(safe_name, "sonstiges"))
             logger.debug("file_uploading", project_id=project_id, index=idx, total=len(files), category=category)
-            
+
             # Upload directly to project folder, no category subfolders
-            file_path = f"{project_path}/{file.filename}"
+            file_path = f"{project_path}/{safe_name}"
             if not await nextcloud.upload_file(file, file_path):
                 logger.error("file_upload_failed", project_id=project_id, category=category)
-                raise HTTPException(status_code=500, detail=f"Failed to upload file: {file.filename}")
+                raise HTTPException(status_code=500, detail=f"Failed to upload file: {safe_name}")
             
             uploaded_files.append({
-                "filename": file.filename,
+                "filename": safe_name,
                 "category": category,
                 "path": file_path
             })
